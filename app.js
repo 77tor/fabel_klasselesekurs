@@ -330,13 +330,6 @@ books[bookName].forEach(textItem => {
       });
 
 
-
-
-
-
-
-
-
       bookDiv.appendChild(titleDiv);
       bookDiv.appendChild(textsDiv);
       menuContainer.appendChild(bookDiv);
@@ -352,13 +345,19 @@ books[bookName].forEach(textItem => {
 
 
 // HJELPEFUNKSJON: Topplinje med Bok og Sidetall
+// HJELPEFUNKSJON: Topplinje/bunntekst med Bok, (valgfri tittel) og Sidetall
   function getHeaderHTML(item) {
     // Gjør om "S.10-11" eller "s. 10-11" til "side 10-11"
     const sideTekst = item.sidetall.replace(/^s\.?\s*/i, "side ");
+    const includeTitle = document.getElementById("toggle-footer-title")?.checked;
+    const footerText = (includeTitle && item.tittel)
+      ? `${item.bok} - ${item.tittel} - ${sideTekst}`
+      : `${item.bok} - ${sideTekst}`;
+
     return `
       <div class="sheet-top-meta">
         <span></span>
-        <span>${item.bok} - ${sideTekst}</span>
+        <span>${footerText}</span>
       </div>
     `;
   }
@@ -1214,8 +1213,9 @@ btnToggleEdit.addEventListener("click", () => {
 // --- INNSTILLINGER I VENSTREMENY (FONT & BUNNTEKST) ---
   const fontSelect = document.getElementById("font-select");
   const toggleFooterCheckbox = document.getElementById("toggle-footer");
-
-const toggleExplainCheckbox = document.getElementById("toggle-lydrette-explain");
+  const toggleFooterTitleCheckbox = document.getElementById("toggle-footer-title");
+  const footerTitleGroup = document.getElementById("footer-title-group");
+  const toggleExplainCheckbox = document.getElementById("toggle-lydrette-explain");
 
   function applyExplainVisibility(isVisible) {
     if (isVisible) {
@@ -1237,7 +1237,7 @@ const toggleExplainCheckbox = document.getElementById("toggle-lydrette-explain")
     });
   }
 
-const toggleGitterHelperCheckbox = document.getElementById("toggle-gitter-helper");
+  const toggleGitterHelperCheckbox = document.getElementById("toggle-gitter-helper");
 
   function applyGitterHelperVisibility(isVisible) {
     if (isVisible) {
@@ -1259,7 +1259,7 @@ const toggleGitterHelperCheckbox = document.getElementById("toggle-gitter-helper
     });
   }
 
-const toggleGitterFasitCheckbox = document.getElementById("toggle-gitter-fasit");
+  const toggleGitterFasitCheckbox = document.getElementById("toggle-gitter-fasit");
 
   function applyGitterFasitVisibility(isVisible) {
     if (isVisible) {
@@ -1281,7 +1281,7 @@ const toggleGitterFasitCheckbox = document.getElementById("toggle-gitter-fasit")
     });
   }
 
-const toggleOrdsokFasitCheckbox = document.getElementById("toggle-ordsok-fasit");
+  const toggleOrdsokFasitCheckbox = document.getElementById("toggle-ordsok-fasit");
 
   function applyOrdsokFasitVisibility(isVisible) {
     if (isVisible) {
@@ -1303,7 +1303,7 @@ const toggleOrdsokFasitCheckbox = document.getElementById("toggle-ordsok-fasit")
     });
   }
 
-const selectOrdsokDir = document.getElementById("select-ordsok-dir");
+  const selectOrdsokDir = document.getElementById("select-ordsok-dir");
   if (selectOrdsokDir) {
     const validModes = ["horizontal", "vertical", "hv", "diagonal", "mixed"];
     const savedOrdsokDir = localStorage.getItem("fabel_ordsok_dir");
@@ -1315,7 +1315,7 @@ const selectOrdsokDir = document.getElementById("select-ordsok-dir");
     });
   }
 
-const selectLuketekstSize = document.getElementById("select-luketekst-size");
+  const selectLuketekstSize = document.getElementById("select-luketekst-size");
 
   function applyLuketekstSize(sizeKey) {
     document.body.classList.remove("luketekst-size-small", "luketekst-size-medium", "luketekst-size-large");
@@ -1334,7 +1334,8 @@ const selectLuketekstSize = document.getElementById("select-luketekst-size");
       applyLuketekstSize(e.target.value);
     });
   }
-const chkOrdsokUppercase = document.getElementById("chk-ordsok-uppercase");
+
+  const chkOrdsokUppercase = document.getElementById("chk-ordsok-uppercase");
   if (chkOrdsokUppercase) {
     const savedOrdsokCase = localStorage.getItem("fabel_ordsok_case") || "lower";
     chkOrdsokUppercase.checked = savedOrdsokCase === "upper";
@@ -1345,7 +1346,7 @@ const chkOrdsokUppercase = document.getElementById("chk-ordsok-uppercase");
     });
   }
 
-const chkSilhuettOrdkjeder = document.getElementById("chk-silhuett-ordkjeder");
+  const chkSilhuettOrdkjeder = document.getElementById("chk-silhuett-ordkjeder");
   if (chkSilhuettOrdkjeder) {
     const savedOrdkjeder = localStorage.getItem("fabel_silhuett_ordkjeder");
     const showOrdkjeder = savedOrdkjeder === null ? true : savedOrdkjeder === "true";
@@ -1359,7 +1360,7 @@ const chkSilhuettOrdkjeder = document.getElementById("chk-silhuett-ordkjeder");
     });
   }
 
-const chkSilhuettLinjer = document.getElementById("chk-silhuett-linjer");
+  const chkSilhuettLinjer = document.getElementById("chk-silhuett-linjer");
   if (chkSilhuettLinjer) {
     const savedLinjer = localStorage.getItem("fabel_silhuett_linjer") === "true";
     chkSilhuettLinjer.checked = savedLinjer;
@@ -1372,7 +1373,7 @@ const chkSilhuettLinjer = document.getElementById("chk-silhuett-linjer");
     });
   }
 
-const selSilhuettType = document.getElementById("sel-silhuett-type");
+  const selSilhuettType = document.getElementById("sel-silhuett-type");
   if (selSilhuettType) {
     const savedType = localStorage.getItem("fabel_silhuett_type") || "vanlig";
     selSilhuettType.value = savedType;
@@ -1383,7 +1384,7 @@ const selSilhuettType = document.getElementById("sel-silhuett-type");
     });
   }
 
-const FONT_MAP = {
+  const FONT_MAP = {
     trykkskrift: "'Trykkskrift', Arial, sans-serif",
     stavskrift: "'Stavskrift', Arial, sans-serif",
     "stavskrift-fet": "'Stavskrift Fet', Arial, sans-serif",
@@ -1406,6 +1407,15 @@ const FONT_MAP = {
     localStorage.setItem("fabel_show_footer", isVisible ? "true" : "false");
   }
 
+  function updateFooterTitleState() {
+    if (!toggleFooterTitleCheckbox || !toggleFooterCheckbox) return;
+    const isFooterVisible = toggleFooterCheckbox.checked;
+    toggleFooterTitleCheckbox.disabled = !isFooterVisible;
+    if (footerTitleGroup) {
+      footerTitleGroup.style.opacity = isFooterVisible ? "1" : "0.45";
+    }
+  }
+
   // Last inn lagrede valg (standard: Trykkskrift og bunntekst PÅ)
   if (fontSelect) {
     const savedFont = localStorage.getItem("fabel_selected_font") || "trykkskrift";
@@ -1425,9 +1435,20 @@ const FONT_MAP = {
 
     toggleFooterCheckbox.addEventListener("change", (e) => {
       applyFooterVisibility(e.target.checked);
+      updateFooterTitleState();
     });
   }
 
+  if (toggleFooterTitleCheckbox) {
+    const savedFooterTitle = localStorage.getItem("fabel_show_footer_title") === "true";
+    toggleFooterTitleCheckbox.checked = savedFooterTitle;
+    updateFooterTitleState();
+
+    toggleFooterTitleCheckbox.addEventListener("change", (e) => {
+      localStorage.setItem("fabel_show_footer_title", e.target.checked ? "true" : "false");
+      renderWorksheet();
+    });
+  }
 
   // START OPP
 showWelcomeScreen();
