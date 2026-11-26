@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fabel klasselesekurs</title>
+  <link rel="icon" type="image/png" href="fane.svg">
+  <link rel="apple-touch-icon" href="fane.svg">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Comic+Neue:wght@400;700&family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- VENSTREMENY (Skjules ved utskrift) -->
+  <aside class="sidebar no-print">
+    <div class="sidebar-header">
+      <img src="logo.svg" alt="Fabel logo" class="sidebar-logo">
+      <div class="sidebar-header-text">
+        <h1>Fabel Klasselesekurs</h1>
+        <p>Velg bok, tekst og oppgave</p>
+      </div>
+    </div>
+
+    <nav id="menu-container" class="menu-tree">
+      <!-- Fylles automatisk av app.js -->
+    </nav>
+
+    <!-- FAST INNSTILLINGSMENY NEDERST I VENSTREMENYEN -->
+    <div class="sidebar-settings">
+      <div class="sidebar-settings-title">Innstillinger</div>
+
+      <div class="setting-group">
+        <label for="font-select">Skrifttype:</label>
+        <select id="font-select">
+          <option value="trykkskrift" selected>Trykkskrift (Standard)</option>
+          <option value="stavskrift">Stavskrift</option>
+          <option value="stavskrift-fet">Stavskrift fet</option>
+          <option value="abc">ABC-skrift</option>
+          <option value="arial">Arial</option>
+        </select>
+      </div>
+
+      <div class="setting-group setting-toggle">
+        <label class="checkbox-label">
+          <input type="checkbox" id="toggle-footer" checked>
+          <span>Vis bok og sidetall nederst</span>
+        </label>
+      </div>
+    </div>
+  </aside>
+
+<!-- Flytende zoom-kontroll til høyre (skjules ved utskrift) -->
+    <div id="zoom-controls" class="zoom-controls no-print" aria-label="Zoom-kontroller">
+      <button type="button" id="btn-zoom-in" class="zoom-btn" title="Zoom inn (+)">+</button>
+      <button type="button" id="btn-zoom-reset" class="zoom-btn zoom-level" title="Tilbakestill til tilpasset skjermstørrelse">100%</button>
+      <button type="button" id="btn-zoom-out" class="zoom-btn" title="Zoom ut (−)">−</button>
+    </div>
+
+  <!-- HOVEDOMRÅDE -->
+  <main class="main-content">
+
+<!-- STARTSIDE (vises ved oppstart) -->
+<div id="welcome-screen" class="welcome-screen">
+  <img src="forside.svg" alt="Fabel Oppgaveark" class="welcome-logo">
+</div>
+
+    <!-- VERKTØYLINJE (Skjules ved utskrift) -->
+    <div class="toolbar no-print">
+      <div class="toolbar-info">
+        <span id="current-breadcrumb">Velg en oppgave i menyen</span>
+      </div>
+      <div class="toolbar-actions">
+        <label id="lydrette-explain-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="toggle-lydrette-explain" checked>
+          <span>Vis forklaring</span>
+        </label>
+<label id="gitter-helper-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="toggle-gitter-helper" checked>
+          <span>Vis hjelperuter</span>
+        </label>
+        <label id="gitter-fasit-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="toggle-gitter-fasit">
+          <span>Vis fasit</span>
+        </label>
+<label id="ordsok-fasit-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="toggle-ordsok-fasit">
+          <span>Vis fasit</span>
+        </label>
+<div id="ordsok-dir-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
+          <label for="select-ordsok-dir">Retning:</label>
+          <select id="select-ordsok-dir" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
+            <option value="horizontal" selected>Vannrett (standard)</option>
+            <option value="vertical">Loddrett</option>
+            <option value="hv">Vannrett og loddrett</option>
+            <option value="diagonal">Diagonalt</option>
+            <option value="mixed">Blanding (alle tre)</option>
+          </select>
+        </div>
+<label id="ordsok-case-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="chk-ordsok-uppercase" />
+          <span>STORE BOKST.</span>
+        </label>
+<label id="silhuett-ordkjeder-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="chk-silhuett-ordkjeder" checked />
+          <span>Vis ordkjeder</span>
+        </label>
+<label id="silhuett-linjer-wrapper" class="toolbar-checkbox" style="display: none;">
+          <input type="checkbox" id="chk-silhuett-linjer" />
+          <span>Vis linjer</span>
+        </label>
+<label id="silhuett-type-wrapper" class="toolbar-checkbox" style="display: none;">
+          <span>Silhuett:</span>
+          <select id="sel-silhuett-type" class="toolbar-select">
+            <option value="vanlig">Vanlig</option>
+            <option value="tilpasset">Tilpasset</option>
+          </select>
+        </label>
+
+<div id="luketekst-size-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
+          <label for="select-luketekst-size">Tekststørrelse:</label>
+          <select id="select-luketekst-size" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
+            <option value="small">Liten</option>
+            <option value="medium" selected>Middels</option>
+            <option value="large">Stor</option>
+          </select>
+        </div>
+
+        <button id="btn-toggle-edit" class="btn btn-secondary">✏️ Rediger tekst/ord</button>
+        <button id="btn-reset" class="btn btn-warning" style="display: none;">↺ Tilbakestill original</button>
+        <button id="btn-print" class="btn btn-primary">🖨️ Skriv ut ark</button>
+      </div>
+    </div>
+
+    <!-- REDIGERINGSPANEL (Skjules ved utskrift og når lukket) -->
+    <div id="edit-panel" class="edit-panel no-print" style="display: none;">
+      <h3>Tilpass innhold før utskrift</h3>
+      <p class="edit-hint">Endringer lagres midlertidig i nettleseren for denne visningen. Trykk «Tilbakestill original» for å hente tilbake data fra filen.</p>
+      <div id="edit-fields"></div>
+    </div>
+
+    <!-- A4 OPPGAVEARK (Det som faktisk skrives ut) -->
+    <div class="sheet-wrapper">
+      <div id="worksheet" class="a4-sheet theme-stavelser">
+        <!-- Innholdet rendres her av app.js -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- INITIALISER DATA-ARRAY -->
+  <script>
+    window.FABEL_DATA = [];
+  </script>
+
+  <!-- DATAFILER 1.TRINN -->
+  <script src="data/fabel1/fabel1-kommer.js"></script>
+
+  <!-- DATAFILER 2.TRINN -->
+  <script src="data/fabel2/fabel2-s10-11.js"></script>
+  <script src="data/fabel2/fabel2-s14-15.js"></script>
+  <script src="data/fabel2/fabel2-s20-21.js"></script>
+  <script src="data/fabel2/fabel2-s22-25.js"></script>
+  <script src="data/fabel2/fabel2-s26-27.js"></script>  
+  <script src="data/fabel2/fabel2-s28-31.js"></script>
+  <script src="data/fabel2/fabel2-s34-35.js"></script>
+  <script src="data/fabel2/fabel2-s38-39.js"></script>
+  <script src="data/fabel2/fabel2-s44-45.js"></script>
+  <script src="data/fabel2/fabel2-s48-49.js"></script>
+  <script src="data/fabel2/fabel2-s54-55.js"></script>
+  <script src="data/fabel2/fabel2-s58-59.js"></script>
+  <script src="data/fabel2/fabel2-s60-61.js"></script>
+  <script src="data/fabel2/fabel2-s64-65.js"></script>
+  <script src="data/fabel2/fabel2-s66-67.js"></script>
+  <script src="data/fabel2/fabel2-s68-69.js"></script>
+  <script src="data/fabel2/fabel2-s70-71.js"></script>
+  <script src="data/fabel2/fabel2-s74-75.js"></script>
+
+  <script src="data/fabel2/fabel2-kommer.js"></script>
+
+  <!-- DATAFILER 3.TRINN (A-BOKA) -->
+  <script src="data/fabel3a/fabel3a-s12-17.js"></script>
+  <script src="data/fabel3a/fabel3a-s20-23.js"></script>
+  <script src="data/fabel3a/fabel3a-s28-31.js"></script>
+  <script src="data/fabel3a/fabel3a-s34-35.js"></script>
+  <script src="data/fabel3a/fabel3a-s44-45.js"></script>
+  <script src="data/fabel3a/fabel3a-s52-55.js"></script>
+  <script src="data/fabel3a/fabel3a-s58-59.js"></script>
+  <script src="data/fabel3a/fabel3a-s70-73.js"></script>
+  <script src="data/fabel3a/fabel3a-s78-81.js"></script>
+  <script src="data/fabel3a/fabel3a-s84-85.js"></script>
+  <script src="data/fabel3a/fabel3a-s94-97.js"></script>
+  <script src="data/fabel3a/fabel3a-s102-105.js"></script>
+  <script src="data/fabel3a/fabel3a-s108-109.js"></script>
+  <script src="data/fabel3a/fabel3a-s112-115.js"></script>
+  <script src="data/fabel3a/fabel3a-s120-121.js"></script>
+  <script src="data/fabel3a/fabel3a-s128-131.js"></script>
+  <script src="data/fabel3a/fabel3a-s136-139.js"></script>
+  <script src="data/fabel3a/fabel3a-s146-149.js"></script>
+  <script src="data/fabel3a/fabel3a-s154-159.js"></script>
+  <script src="data/fabel3a/fabel3a-s162-165.js"></script>
+  <script src="data/fabel3a/fabel3a-s177-185.js"></script>
+
+  <!-- DATAFILER 3.TRINN (B-BOKA) -->
+  <script src="data/fabel3b/fabel3b-kommer.js"></script>
+
+
+  <!-- HOVEDLOGIKK -->
+  <script src="app.js"></script>
+</body>
+</html>

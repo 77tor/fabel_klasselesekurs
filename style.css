@@ -1,0 +1,345 @@
+/* ==========================================================================
+   1. FONTER, VARIABLER & GRUNNLEGGENDE OPPSETT
+   ========================================================================== */
+@font-face { font-family: 'Trykkskrift'; src: url('skrift/trykkskrift.otf') format('opentype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'Stavskrift'; src: url('skrift/stavskrift.otf') format('opentype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'Stavskrift Fet'; src: url('skrift/stavskrift fet.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'ABC Skrift'; src: url('skrift/abc_.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+
+:root {
+  --sidebar-width: 310px;
+  --font-main: 'Nunito', sans-serif;
+  --font-display: 'Fredoka', sans-serif;
+  --worksheet-font: 'Trykkskrift', 'Nunito', Arial, sans-serif;
+
+  /* Fargetemaer for de 6 oppgavene */
+  --bg-stavelser: #f3d6ff;
+  --bg-ordsok: #9ad8ff;
+  --bg-luketekst: #f67b7b;
+  --bg-silhuett: #9eff8a;
+  --bg-lydrette: #fdcb6e;
+  --bg-gitter: #dfecc6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-main); background-color: #f0f2f5; color: #1a1a1a; display: flex; min-height: 100vh; }
+
+/* ==========================================================================
+   2. VENSTREMENY & INNSTILLINGER
+   ========================================================================== */
+.sidebar { width: var(--sidebar-width); min-width: var(--sidebar-width); background: #1e293b; color: #f8fafc; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; flex-shrink: 0; }
+.sidebar-header { padding: 18px 20px; background: #0f172a; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.sidebar-logo { width: 50px; height: 50px; object-fit: contain; flex-shrink: 0; }
+.sidebar-header-text { min-width: 0; }
+.sidebar-header h1 { font-size: 1.2rem; font-weight: 800; line-height: 1.2; }
+.sidebar-header p { font-size: 0.85rem; color: #94a3b8; margin-top: 3px; }
+
+#menu-container { flex: 1; overflow-y: auto; }
+.menu-book { border-bottom: 1px solid #334155; }
+.menu-book-title { padding: 12px 16px; font-weight: 700; font-size: 0.95rem; background: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+.menu-book-title:hover { background: #273549; }
+
+.menu-texts { background: #162032; padding-bottom: 6px; }
+.menu-text-group { padding: 2px 8px 2px 12px; }
+.menu-text-header { width: 100%; background: none; border: none; color: #94a3b8; font-family: var(--font-main); font-size: 0.85rem; font-weight: 700; padding: 7px 8px; border-radius: 5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 6px; text-align: left; transition: background 0.15s, color 0.15s; }
+.menu-text-header:hover { background: #273549; color: #f8fafc; }
+.menu-text-header.is-active-text { color: #ffffff; }
+.menu-text-header .text-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-text-header .chevron { font-size: 0.8rem; opacity: 0.8; flex-shrink: 0; }
+
+.menu-task-list { list-style: none; padding-left: 8px; margin: 2px 0 6px 6px; border-left: 2px solid #334155; }
+.menu-text-group.collapsed .menu-task-list { display: none; }
+.menu-task-btn { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; background: none; border: none; color: #94a3b8; padding: 5px 10px; font-size: 0.85rem; font-family: var(--font-main); cursor: pointer; border-radius: 4px; }
+.menu-task-btn:hover { color: #fff; background: #273549; }
+.menu-task-btn.active { color: #fff; background: #3b82f6; font-weight: 700; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+/* Fast innstillingsboks nederst i venstremenyen */
+.sidebar-settings { margin-top: auto; padding: 14px 16px; background: rgba(0, 0, 0, 0.25); border-top: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px; }
+.sidebar-settings-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; font-weight: 700; }
+.setting-group { display: flex; flex-direction: column; gap: 5px; }
+.setting-group label { font-size: 0.85rem; color: #e2e8f0; }
+.setting-group select { padding: 7px 10px; border-radius: 6px; border: 1px solid #475569; background-color: #1e293b; color: #f8fafc; font-size: 0.88rem; cursor: pointer; }
+.setting-group select:focus { outline: 2px solid #3b82f6; }
+.checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.checkbox-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: #3b82f6; cursor: pointer; }
+
+.menu-text-row { display: flex; align-items: center; gap: 4px; border-radius: 5px; transition: background 0.15s; }
+.menu-text-row:hover { background: #273549; }
+.menu-text-header { flex: 1; min-width: 0; background: none; border: none; color: #94a3b8; font-family: var(--font-main); font-size: 0.85rem; font-weight: 700; padding: 7px 6px 7px 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 6px; text-align: left; }
+.menu-text-row:hover .menu-text-header, .menu-text-row.is-active-text .menu-text-header { color: #ffffff; }
+.menu-text-header .text-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-text-header .chevron { font-size: 0.8rem; opacity: 0.8; flex-shrink: 0; }
+.menu-print-all-btn { background: none; border: none; color: #94a3b8; font-size: 0.85rem; padding: 5px 6px; border-radius: 4px; cursor: pointer; opacity: 0.65; flex-shrink: 0; transition: opacity 0.15s, background 0.15s; }
+.menu-text-row:hover .menu-print-all-btn { opacity: 1; }
+.menu-print-all-btn:hover { background: #3b82f6; color: #fff; }
+.batch-print-sheet { display: none; }
+
+/* Skjul/vis enkeltark i venstremenyen */
+.menu-task-row { display: flex; align-items: center; gap: 4px; border-radius: 4px; }
+.menu-task-row .menu-task-btn { flex: 1; min-width: 0; }
+.menu-task-row .task-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-task-toggle-btn { background: none; border: none; color: #94a3b8; font-size: 0.78rem; padding: 4px 6px; border-radius: 4px; cursor: pointer; opacity: 0; flex-shrink: 0; transition: opacity 0.15s, background 0.15s; }
+.menu-task-row:hover .menu-task-toggle-btn, .menu-task-row.is-hidden-task .menu-task-toggle-btn { opacity: 0.85; }
+.menu-task-toggle-btn:hover { background: #334155; color: #fff; opacity: 1; }
+.menu-task-row.is-hidden-task .menu-task-btn { opacity: 0.42; cursor: default; }
+.menu-task-row.is-hidden-task .menu-task-btn:hover { background: none; color: #94a3b8; }
+.menu-task-row.is-hidden-task .task-label { text-decoration: line-through; }
+.menu-task-row.is-hidden-task .dot { filter: grayscale(1); }
+
+/* Flytende zoom-kontroll til høyre */
+.zoom-controls { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 45; display: flex; flex-direction: column; background: #1e293b; color: #f8fafc; border-radius: 10px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25); border: 1px solid #334155; overflow: hidden; }
+.zoom-btn { background: transparent; border: none; color: #f8fafc; font-size: 1.15rem; font-weight: 700; width: 52px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.zoom-btn:hover { background: #334155; }
+.zoom-level { font-size: 0.78rem; font-weight: 700; height: 34px; border-top: 1px solid #334155; border-bottom: 1px solid #334155; color: #cbd5e1; }
+.zoom-level:hover { color: #fff; }
+body.is-welcome-screen .zoom-controls { display: none; }
+
+@media print {
+  .zoom-controls { display: none !important; }
+  #worksheet-stack, .a4-sheet { zoom: 1 !important; transform: none !important; }
+}
+
+
+/* ==========================================================================
+   3. HOVEDOMRÅDE, VERKTØYLINJE & REDIGERINGSPANEL
+   ========================================================================== */
+.main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 20px 20px 20px; }
+.toolbar { position: sticky; top: 0; z-index: 30; width: calc(100% + 40px); max-width: none; background: #fff; padding: 12px 24px; border-radius: 0; border-bottom: 3px solid #cbd5e1; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; margin: 0 -20px 20px -20px; gap: 12px; flex-wrap: wrap; transition: background-color 0.25s ease, border-color 0.25s ease; }
+.toolbar-info { font-weight: 700; color: #334155; }
+.toolbar-actions { display: flex; gap: 10px; }
+
+/* Oppgavefarger for toppmenylinjen */
+body.active-task-stavelser .toolbar { background-color: #f6e6ff; border-bottom-color: #d896ff; }
+body.active-task-ordsok .toolbar { background-color: #e3f2ff; border-bottom-color: #5cb8ff; }
+body.active-task-luketekst .toolbar { background-color: #ffe8e8; border-bottom-color: #f67b7b; }
+body.active-task-silhuettOgOrdkjeder .toolbar { background-color: #e6fce0; border-bottom-color: #6ee755; }
+body.active-task-lydretteOrd .toolbar { background-color: #fff6dc; border-bottom-color: #fdcb6e; }
+body.active-task-gitter .toolbar { background-color: #eef6e1; border-bottom-color: #b5d380; }
+
+.btn { padding: 8px 14px; border: none; border-radius: 6px; font-family: var(--font-main); font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: opacity 0.15s; }
+.btn:hover { opacity: 0.9; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-secondary { background: #e2e8f0; color: #1e293b; }
+.btn-warning { background: #f59e0b; color: #fff; }
+
+.edit-panel { position: fixed; top: 74px; left: calc(50% + (var(--sidebar-width) / 2)); transform: translateX(-50%); z-index: 40; width: min(210mm, calc(100vw - var(--sidebar-width) - 40px)); max-height: calc(100vh - 96px); overflow-y: auto; background: #fff; padding: 18px 20px; border-radius: 10px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25); border: 1px solid #cbd5e1; border-left: 10px solid #3b82f6; transition: border-left-color 0.25s ease; }
+
+/* Oppgavefarge på venstre kantlinje i redigeringsboksen */
+body.active-task-stavelser .edit-panel { border-left-color: #d896ff; }
+body.active-task-ordsok .edit-panel { border-left-color: #5cb8ff; }
+body.active-task-luketekst .edit-panel { border-left-color: #f67b7b; }
+body.active-task-silhuettOgOrdkjeder .edit-panel { border-left-color: #6ee755; }
+body.active-task-lydretteOrd .edit-panel { border-left-color: #fdcb6e; }
+body.active-task-gitter .edit-panel { border-left-color: #b5d380; }
+.edit-panel h3 { font-size: 1rem; margin-bottom: 4px; }
+.edit-hint { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; }
+.edit-group { margin-bottom: 10px; }
+.edit-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+.edit-group input, .edit-group textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: var(--font-main); font-size: 0.9rem; }
+.edit-panel h3, .edit-panel > div:first-child { cursor: grab; user-select: none; }
+.edit-panel.is-dragging, .edit-panel.is-dragging h3, .edit-panel.is-dragging > div:first-child { cursor: grabbing; user-select: none; }
+
+/* Startside */
+body.is-welcome-screen { overflow: hidden; height: 100vh; }
+body.is-welcome-screen .main-content { height: 100vh; padding: 0 !important; overflow: hidden; }
+.welcome-screen { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 32px; box-sizing: border-box; }
+.welcome-logo { max-width: 440px; width: 100%; height: auto; }
+body.is-welcome-screen .main-content > *:not(#welcome-screen), body.is-welcome-screen .toolbar, body.is-welcome-screen .a4-sheet, body.is-welcome-screen #edit-panel, body.is-welcome-screen #worksheet-stack { display: none !important; }
+body:not(.is-welcome-screen) .welcome-screen { display: none !important; }
+.sidebar-header { cursor: pointer; }
+
+/* ==========================================================================
+   4. A4 OPPGAVEARK – GENERELT & FARGETEMAER
+   ========================================================================== */
+.a4-sheet { width: 210mm; height: 297mm; padding: 10mm; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sheet-inner-white { background: #ffffff; border-radius: 22px; flex: 1; padding: 16px 22px 22px; display: flex; flex-direction: column; }
+.sheet-colored-box { border-radius: 16px; padding: 18px; flex: 1; display: flex; flex-direction: column; }
+
+/* Valgt skrifttype på alle ark */
+.a4-sheet,
+.a4-sheet td,
+.a4-sheet th,
+.a4-sheet p,
+.a4-sheet span,
+.a4-sheet div,
+.a4-sheet li,
+.a4-sheet h3 { font-family: var(--worksheet-font) !important; }
+.a4-sheet .sheet-title { font-family: var(--font-display) !important; }
+
+/* Bunntekst (Bok + sidetall nederst til høyre) */
+.sheet-top-meta { order: 99; margin-top: auto; padding-top: 8px; display: flex; justify-content: flex-end; width: 100%; font-size: 0.9rem; }
+body.hide-sheet-footer .sheet-top-meta { display: none !important; }
+
+/* Overskrift og fargetemaer */
+.sheet-title { font-family: var(--font-display); font-size: 2.7rem; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; line-height: 1.05; -webkit-text-stroke: 2px #000; paint-order: stroke fill; }
+
+.theme-stavelser, .theme-stavelser .sheet-colored-box { background-color: var(--bg-stavelser); }
+.theme-ordsok { background-color: var(--bg-ordsok); }
+.theme-luketekst, .theme-luketekst .sheet-colored-box { background-color: var(--bg-luketekst); }
+.theme-silhuett, .theme-silhuett .sheet-colored-box { background-color: var(--bg-silhuett); }
+.theme-lydrette, .theme-lydrette .sheet-colored-box { background-color: var(--bg-lydrette); }
+.theme-gitter, .theme-gitter .sheet-colored-box { background-color: var(--bg-gitter); }
+
+.theme-stavelser .sheet-title { color: var(--bg-stavelser); }
+.theme-ordsok .sheet-title    { color: var(--bg-ordsok); }
+.theme-luketekst .sheet-title { color: var(--bg-luketekst); }
+.theme-silhuett .sheet-title  { color: var(--bg-silhuett); }
+.theme-lydrette .sheet-title  { color: var(--bg-lydrette); }
+.theme-gitter .sheet-title    { color: var(--bg-gitter); }
+
+/* Bunntekst (Bok og sidetall) i fet skrift og samme farge som arket */
+.sheet-top-meta { font-weight: 700; }
+.theme-stavelser .sheet-top-meta { color: #d982b5; }
+.theme-ordsok .sheet-top-meta { color: #5aa9e6; }
+.theme-luketekst .sheet-top-meta { color: #e06d53; }
+.theme-silhuett .sheet-top-meta { color: #52b788; }
+.theme-lydrette .sheet-top-meta { color: #e6a817; }
+.theme-gitter .sheet-top-meta { color: #7cb518; }
+
+/* Oppgavebolk nedover & sticky topplinje */
+#worksheet-stack { display: flex; flex-direction: column; align-items: center; gap: 32px; width: 100%; padding-bottom: 48px; }
+#worksheet-stack .a4-sheet { scroll-margin-top: 84px; }
+body.is-welcome-screen #worksheet-stack { display: none !important; }
+@media print { body:not(.printing-all-sheets) #worksheet-stack .a4-sheet:not(.is-current-sheet) { display: none !important; } }
+
+/* ==========================================================================
+   5. SPESIFIKK STYLING PER OPPGAVE
+   ========================================================================== */
+/* 5.1 Stavelsesdeling */
+.instruction-card { background: #fff; border-radius: 12px; padding: 14px 24px; width: 65%; margin-bottom: 18px; font-size: 1.25rem; line-height: 1.45; }
+.instruction-card ul { padding-left: 22px; }
+.instruction-card li { margin-bottom: 4px; }
+.syllable-table { width: 100%; background: #fff; border: 2px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; table-layout: fixed; flex: 1; }
+.syllable-table td { border: none; border-right: 2px solid #000; border-bottom: 2px solid #000; text-align: center; vertical-align: middle; font-size: 1.45rem; width: 18%; padding: 6px 4px; }
+.syllable-table td:last-child { border-right: none; }
+.syllable-table tr:last-child td { border-bottom: none; }
+.syllable-table td:first-child { width: 28%; font-size: 1.65rem; font-weight: 600; padding: 6px 10px; }
+.syllable-table tr:first-child td { font-weight: 800; }
+.vowel-dot { position: relative; display: inline-block; }
+.vowel-dot::after { content: ""; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: #e11d48; border-radius: 50%; }
+
+/* 5.2 Ordsøk */
+.theme-ordsok .sheet-colored-box { background: #a8dcfa; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 16px; flex: 1; justify-content: space-between; }
+.wordsearch-grid { width: 100%; background: #fff; border: 1.5px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; table-layout: fixed; margin: 0; }
+.wordsearch-grid td { border: none; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; text-align: center; vertical-align: middle; font-size: 1.85rem; font-weight: 600; height: 42px; padding: 4px 0 0; line-height: 1; }
+.wordsearch-grid td:last-child { border-right: none; }
+.wordsearch-grid tr:last-child td { border-bottom: none; }
+.wordsearch-footer { background: #fff; border-radius: 12px; padding: 14px 18px 18px; text-align: center; margin: 0; }
+.wordsearch-footer h4 { text-align: center; font-size: 1.2rem; margin-bottom: 10px; }
+.wordsearch-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.word-chip { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 6px 18px; font-size: 1.5rem; font-weight: 600; background: #fff; }
+body.show-ordsok-fasit .wordsearch-grid td.ordsok-fasit-cell { background-color: #fde047; font-weight: 800; color: #0f172a; }
+
+/* 5.3 Luketekst */
+.cloze-top { display: grid; grid-template-columns: 1fr 1.15fr; gap: 18px; margin-bottom: 14px; }
+.wordbank-table { width: 100%; background: #fff; border: 1.5px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; }
+.wordbank-table td { border: none; border-bottom: 1.5px solid #000; padding: 6px 12px; font-size: 1.1rem; }
+.wordbank-table tr:last-child td { border-bottom: none; }
+.theme-luketekst .wordbank-table td { font-size: 1.45rem; font-weight: 600; padding: 5px 12px; }
+.extra-task-box { background: #fff; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; }
+.extra-task-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; color: #0f172a; }
+.extra-task-text { font-size: 1.2rem; line-height: 1.5; }
+.pill-banner { background: #fff; border-radius: 10px; text-align: center; padding: 10px 16px; font-size: 1.25rem; font-weight: 600; margin-bottom: 14px; }
+.cloze-text-box { background: #fff; border-radius: 14px; padding: 20px 24px; flex: 1; }
+.cloze-blank { display: inline-block; width: 170px; border-bottom: 2px solid #000; margin: 0 4px; }
+.cloze-text-box h3 { font-size: 1.65rem; margin-bottom: 14px; }
+.cloze-body { font-size: 1.45rem; line-height: 2.1; }
+body.luketekst-size-small .cloze-text-box h3 { font-size: 1.4rem; }
+body.luketekst-size-small .cloze-body { font-size: 1.2rem; line-height: 1.95; }
+body.luketekst-size-medium .cloze-text-box h3 { font-size: 1.65rem; }
+body.luketekst-size-medium .cloze-body { font-size: 1.45rem; line-height: 2.1; }
+body.luketekst-size-large .cloze-text-box h3 { font-size: 1.9rem; }
+body.luketekst-size-large .cloze-body { font-size: 1.7rem; line-height: 2.25; }
+
+/* 5.4 Silhuett-ord og ordkjeder */
+.theme-silhuett .sheet-colored-box { display: flex; flex-direction: column; flex: 1; gap: 14px; padding-bottom: 18px; }
+.silhuett-main-box { background: #fff; border-radius: 12px; padding: 18px 20px 28px; }
+.silhuett-bank { width: 100%; margin: 0 auto 16px; background: #fff; border: 1.5px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.silhuett-bank td { border: none; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; padding: 8px 14px; font-size: 1.45rem; font-weight: 600; width: 33.33%; }
+.silhuett-bank td:last-child { border-right: none; }
+.silhuett-bank tr:last-child td { border-bottom: none; }
+.silhuett-canvas { background: #fff; padding: 26px 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px 20px; align-items: center; justify-items: center; }
+.silhuett-word { display: flex; align-items: flex-start; }
+.s-box { width: 28px; height: 28px; border: 2px solid #000; margin-left: -2px; background: #fff; }
+.s-box.asc { height: 44px; margin-top: -16px; }
+.s-box.desc { height: 44px; }
+.ordkjeder-box { background: #fff; border-radius: 12px; padding: 16px 20px 24px; margin-top: auto; margin-bottom: 0; }
+.ordkjeder-title { font-family: var(--font-display); font-size: 2.2rem; text-align: center; color: #000; margin: 0 0 18px; letter-spacing: 1px; }
+.ordkjeder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 20px; text-align: center; font-size: 1.4rem; font-weight: 600; }
+body.hide-silhuett-ordkjeder .ordkjeder-box { display: none; }
+body.hide-silhuett-ordkjeder .silhuett-main-box { flex: 1; display: flex; flex-direction: column; }
+body.hide-silhuett-ordkjeder .silhuett-canvas { flex: 1; align-content: space-evenly; gap: 64px 20px; }
+.silhuett-item { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.bokstavhus-linjer { display: none; width: 82%; max-width: 280px; margin-top: 22px; }
+body.show-silhuett-linjer .bokstavhus-linjer { display: block; }
+.bh-line { width: 100%; }
+.bh-top, .bh-mid { border-top: 1.5px solid #9ca3af; height: 12px; }
+.bh-base { border-top: 3px solid #1e293b; height: 12px; }
+.bh-bottom { border-top: 1.5px solid #9ca3af; height: 2px; }
+body.show-silhuett-linjer .silhuett-canvas { gap: 38px 20px; }
+body.show-silhuett-linjer.hide-silhuett-ordkjeder .silhuett-canvas { gap: 52px 20px; }
+.toolbar-select { border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: 700; color: #1e293b; background: #fff; cursor: pointer; }
+
+/* 5.5 Lydrette ord */
+.lydrette-wordbox { background: #fff; border-radius: 12px; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: 1.75rem; font-weight: 600; line-height: 1.5; margin-bottom: 14px; }
+.lydrette-table { width: 100%; background: #fff; border: 2px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; flex: 1; table-layout: fixed; }
+.lydrette-table th, .lydrette-table td { border: none; border-right: 2px solid #000; border-bottom: 2px solid #000; width: 33.33%; }
+.lydrette-table th:last-child, .lydrette-table td:last-child { border-right: none; }
+.lydrette-table tbody tr:last-child td, .lydrette-table > tr:last-child td { border-bottom: none !important; }
+.lydrette-table th { background: #fde3a7; padding: 6px 8px; vertical-align: middle; height: 64px; }
+.lydrette-table td { height: auto; }
+.lydrette-table th .th-main { display: block; font-size: 1.35rem; font-weight: 800; line-height: 1.2; margin-bottom: 3px; }
+.lydrette-table th .th-sub { display: block; font-size: 0.85rem; font-weight: 600; line-height: 1.2; }
+.toolbar-checkbox { display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 7px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 700; color: #1e293b; cursor: pointer; user-select: none; }
+.toolbar-checkbox input[type="checkbox"] { width: 16px; height: 16px; accent-color: #2563eb; cursor: pointer; }
+body.hide-lydrette-explain .lydrette-table th:nth-child(3), body.hide-lydrette-explain .lydrette-table td:nth-child(3) { display: none; }
+body.hide-lydrette-explain .lydrette-table th:nth-child(2), body.hide-lydrette-explain .lydrette-table td:nth-child(2) { border-right: none; }
+body.hide-lydrette-explain .lydrette-table th, body.hide-lydrette-explain .lydrette-table td { width: 50%; }
+
+/* 5.6 Gitter */
+.gitter-top { display: grid; grid-template-columns: 1fr 1.1fr; gap: 18px; margin-bottom: 14px; }
+.vowel-box { background: #fff; border-radius: 12px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.vowel-box h4 { color: #ef4444; font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; }
+.vowel-box p { font-size: 1.75rem; font-weight: 600; letter-spacing: 8px; line-height: 1.45; }
+.theme-gitter .gitter-top > *:not(.vowel-box) { width: 100%; background: #fff; border: 1.5px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; }
+.theme-gitter .gitter-top > *:not(.vowel-box), .theme-gitter .gitter-top > *:not(.vowel-box) * { font-size: 1.55rem !important; font-weight: 600 !important; line-height: 1.4 !important; }
+.theme-gitter .gitter-top > *:not(.vowel-box) td { border: none !important; border-bottom: 1.5px solid #000 !important; border-radius: 0 !important; }
+.theme-gitter .gitter-top > *:not(.vowel-box) tr:last-child td { border-bottom: none !important; }
+.gitter-table { width: 100%; background: #fff; border: 1.5px solid #000; border-radius: 12px; border-collapse: separate; border-spacing: 0; flex: 1; table-layout: fixed; }
+.gitter-table td { border: none; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; position: relative; text-align: center; height: 42px; }
+.gitter-table td:last-child { border-right: none; }
+.gitter-table tr:last-child td { border-bottom: none; }
+.gitter-table tr:first-child td:first-child { border-top-left-radius: 10px; }
+.gitter-table tr:first-child td:last-child { border-top-right-radius: 10px; }
+.gitter-table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+.gitter-table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+.gitter-row-num { display: none; }
+.gitter-table td.kv-header-cell { font-size: 1.55rem; font-weight: 900; text-align: center; vertical-align: middle; height: 48px; padding: 0; line-height: 1; }
+.gitter-table td.kv-header-k { background-color: #eff6ff; color: #1d4ed8; }
+.gitter-table td.kv-header-v { background-color: #ef4444; color: #ffffff; }
+body:not(.hide-gitter-helper) .gitter-cell-blocked { background-color: #d1d5db; }
+body:not(.hide-gitter-helper) .gitter-cell-vowel { background-color: #fecdd3; }
+.gitter-fasit-letter { display: none; font-size: 1.35rem; font-weight: 700; color: #1e293b; }
+body.show-gitter-fasit .gitter-fasit-letter { display: inline; }
+
+/* ==========================================================================
+   6. UTSKRIFTSREGLER (A4)
+   ========================================================================== */
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  html, body, .main-content { height: auto !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; background: #fff !important; display: block !important; }
+  .no-print, #worksheet { display: none !important; }
+  .a4-sheet { box-shadow: none !important; width: 210mm; height: 297mm; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Enkeltutskrift ("Skriv ut ark") */
+  body:not(.printing-all-sheets) #worksheet-stack { display: block !important; gap: 0 !important; padding: 0 !important; margin: 0 !important; }
+  body:not(.printing-all-sheets) #worksheet-stack .a4-sheet:not(.is-current-sheet) { display: none !important; }
+  body:not(.printing-all-sheets) #worksheet-stack .a4-sheet.is-current-sheet { page-break-after: auto !important; break-after: auto !important; }
+
+  /* Batch-utskrift (skriver-ikon i menyen) */
+  body.printing-all-sheets #worksheet-stack { display: none !important; }
+  body.printing-all-sheets .a4-sheet:not(.batch-print-sheet) { display: none !important; }
+  body.printing-all-sheets .batch-print-sheet { display: flex !important; page-break-after: always; break-after: page; }
+  body.printing-all-sheets .batch-print-sheet:last-child { page-break-after: auto; break-after: auto; }
+}
