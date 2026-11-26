@@ -1317,9 +1317,9 @@ btnToggleEdit.addEventListener("click", () => {
 
   const selectLuketekstSize = document.getElementById("select-luketekst-size");
 
-  function applyLuketekstSize(sizeKey) {
-    document.body.classList.remove("luketekst-size-small", "luketekst-size-medium", "luketekst-size-large");
-    const validSizes = ["small", "medium", "large"];
+function applyLuketekstSize(sizeKey) {
+    document.body.classList.remove("luketekst-size-small", "luketekst-size-medium", "luketekst-size-large", "luketekst-size-xlarge");
+    const validSizes = ["small", "medium", "large", "xlarge"];
     const chosen = validSizes.includes(sizeKey) ? sizeKey : "medium";
     document.body.classList.add(`luketekst-size-${chosen}`);
     localStorage.setItem("fabel_luketekst_size", chosen);
