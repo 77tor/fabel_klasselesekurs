@@ -1450,6 +1450,26 @@ btnToggleEdit.addEventListener("click", () => {
     });
   }
 
+// Åpne/lukke innstillingsmeny i topplinjen
+  const btnToggleSettings = document.getElementById("btn-toggle-settings");
+  const settingsPopover = document.getElementById("settings-popover");
+
+  if (btnToggleSettings && settingsPopover) {
+    btnToggleSettings.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = settingsPopover.style.display === "block";
+      settingsPopover.style.display = isOpen ? "none" : "block";
+    });
+
+    settingsPopover.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    document.addEventListener("click", () => {
+      settingsPopover.style.display = "none";
+    });
+  }
+
   // START OPP
 showWelcomeScreen();
 });

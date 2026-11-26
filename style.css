@@ -7,7 +7,7 @@
 @font-face { font-family: 'ABC Skrift'; src: url('skrift/abc_.ttf') format('truetype'); font-weight: normal; font-style: normal; }
 
 :root {
-  --sidebar-width: 310px;
+  --sidebar-width: 365px;
   --font-main: 'Nunito', sans-serif;
   --font-display: 'Fredoka', sans-serif;
   --worksheet-font: 'Trykkskrift', 'Nunito', Arial, sans-serif;
@@ -343,3 +343,22 @@ body.show-gitter-fasit .gitter-fasit-letter { display: inline; }
   body.printing-all-sheets .batch-print-sheet { display: flex !important; page-break-after: always; break-after: page; }
   body.printing-all-sheets .batch-print-sheet:last-child { page-break-after: auto; break-after: auto; }
 }
+
+/* --- INNSTILLINGS-POPOVER OG TANNJHUL I VENSTREMENY --- */
+.sidebar-header { display: flex; align-items: center; gap: 10px; position: relative; overflow: visible; }
+.sidebar-header-text { flex: 1; min-width: 0; }
+.settings-dropdown-wrapper { position: relative; display: inline-block; margin-left: auto; flex-shrink: 0; }
+.sidebar-gear-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.08); color: #ffffff; font-size: 1.05rem; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s ease, transform 0.2s ease; }
+.sidebar-gear-btn:hover { background: rgba(255, 255, 255, 0.18); transform: rotate(25deg); }
+.settings-popover { position: absolute; top: calc(100% + 10px); left: 0; width: 280px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18); padding: 16px; z-index: 1000; text-align: left; color: #1e293b; }
+.popover-section-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 12px; }
+.popover-field { display: flex; flex-direction: column; gap: 6px; }
+.popover-field label { font-size: 0.85rem; font-weight: 600; color: #334155; }
+.popover-field select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: #f8fafc; font-size: 0.9rem; color: #0f172a; cursor: pointer; }
+.popover-divider { height: 1px; background: #e2e8f0; margin: 14px 0; }
+.popover-switch-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.88rem; font-weight: 600; color: #1e293b; cursor: pointer; padding: 4px 0; }
+.popover-sub-row { padding-left: 12px; margin-top: 6px; font-weight: 500; color: #475569; transition: opacity 0.2s ease; }
+.popover-switch-row input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 36px; height: 20px; background: #cbd5e1; border-radius: 999px; position: relative; cursor: pointer; transition: background 0.2s ease; flex-shrink: 0; }
+.popover-switch-row input[type="checkbox"]::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #ffffff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease; }
+.popover-switch-row input[type="checkbox"]:checked { background: #2563eb; }
+.popover-switch-row input[type="checkbox"]:checked::after { transform: translateX(16px); }

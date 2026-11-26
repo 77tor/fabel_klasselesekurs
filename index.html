@@ -19,41 +19,42 @@
         <h1>Fabel Klasselesekurs</h1>
         <p>Velg bok, tekst og oppgave</p>
       </div>
+
+      <!-- INNSTILLINGSHJUL I TOPPEN AV VENSTREMENYEN -->
+      <div class="settings-dropdown-wrapper sidebar-settings-trigger">
+        <button type="button" id="btn-toggle-settings" class="sidebar-gear-btn" title="Globale innstillinger for alle ark" aria-label="Innstillinger">⚙️</button>
+        <div id="settings-popover" class="settings-popover sidebar-popover" style="display: none;">
+          <div class="popover-section-title">Generelt for alle ark</div>
+          
+          <div class="popover-field">
+            <label for="font-select">Skrifttype</label>
+            <select id="font-select">
+              <option value="trykkskrift" selected>Trykkskrift (Standard)</option>
+              <option value="stavskrift">Stavskrift</option>
+              <option value="stavskrift-fet">Stavskrift fet</option>
+              <option value="abc">ABC-skrift</option>
+              <option value="arial">Arial</option>
+            </select>
+          </div>
+
+          <div class="popover-divider"></div>
+
+          <label class="popover-switch-row">
+            <span>Vis bok og sidetall nederst</span>
+            <input type="checkbox" id="toggle-footer" checked>
+          </label>
+
+          <label class="popover-switch-row popover-sub-row" id="footer-title-group">
+            <span>↳ Ta med teksttittel</span>
+            <input type="checkbox" id="toggle-footer-title">
+          </label>
+        </div>
+      </div>
     </div>
 
     <nav id="menu-container" class="menu-tree">
       <!-- Fylles automatisk av app.js -->
     </nav>
-
-    <!-- FAST INNSTILLINGSMENY NEDERST I VENSTREMENYEN -->
-    <div class="sidebar-settings">
-      <div class="sidebar-settings-title">Innstillinger</div>
-
-      <div class="setting-group">
-        <label for="font-select">Skrifttype:</label>
-        <select id="font-select">
-          <option value="trykkskrift" selected>Trykkskrift (Standard)</option>
-          <option value="stavskrift">Stavskrift</option>
-          <option value="stavskrift-fet">Stavskrift fet</option>
-          <option value="abc">ABC-skrift</option>
-          <option value="arial">Arial</option>
-        </select>
-      </div>
-
-<div class="setting-group setting-toggle">
-        <label class="checkbox-label">
-          <input type="checkbox" id="toggle-footer" checked>
-          <span>Vis bok og sidetall nederst</span>
-        </label>
-      </div>
-
-      <div class="setting-group setting-toggle" id="footer-title-group" style="padding-left: 22px; margin-top: -4px;">
-        <label class="checkbox-label">
-          <input type="checkbox" id="toggle-footer-title">
-          <span>Ta med teksttittel</span>
-        </label>
-      </div>
-    </div>>
   </aside>
 
 <!-- Flytende zoom-kontroll til høyre (skjules ved utskrift) -->
@@ -81,7 +82,7 @@
           <input type="checkbox" id="toggle-lydrette-explain" checked>
           <span>Vis forklaring</span>
         </label>
-<label id="gitter-helper-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="gitter-helper-wrapper" class="toolbar-checkbox" style="display: none;">
           <input type="checkbox" id="toggle-gitter-helper" checked>
           <span>Vis hjelperuter</span>
         </label>
@@ -89,11 +90,11 @@
           <input type="checkbox" id="toggle-gitter-fasit">
           <span>Vis fasit</span>
         </label>
-<label id="ordsok-fasit-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="ordsok-fasit-wrapper" class="toolbar-checkbox" style="display: none;">
           <input type="checkbox" id="toggle-ordsok-fasit">
           <span>Vis fasit</span>
         </label>
-<div id="ordsok-dir-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
+        <div id="ordsok-dir-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
           <label for="select-ordsok-dir">Retning:</label>
           <select id="select-ordsok-dir" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
             <option value="horizontal" selected>Vannrett (standard)</option>
@@ -103,19 +104,19 @@
             <option value="mixed">Blanding (alle tre)</option>
           </select>
         </div>
-<label id="ordsok-case-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="ordsok-case-wrapper" class="toolbar-checkbox" style="display: none;">
           <input type="checkbox" id="chk-ordsok-uppercase" />
           <span>STORE BOKST.</span>
         </label>
-<label id="silhuett-ordkjeder-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="silhuett-ordkjeder-wrapper" class="toolbar-checkbox" style="display: none;">
           <input type="checkbox" id="chk-silhuett-ordkjeder" checked />
           <span>Vis ordkjeder</span>
         </label>
-<label id="silhuett-linjer-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="silhuett-linjer-wrapper" class="toolbar-checkbox" style="display: none;">
           <input type="checkbox" id="chk-silhuett-linjer" />
           <span>Vis linjer</span>
         </label>
-<label id="silhuett-type-wrapper" class="toolbar-checkbox" style="display: none;">
+        <label id="silhuett-type-wrapper" class="toolbar-checkbox" style="display: none;">
           <span>Silhuett:</span>
           <select id="sel-silhuett-type" class="toolbar-select">
             <option value="vanlig">Vanlig</option>
@@ -123,7 +124,7 @@
           </select>
         </label>
 
-<div id="luketekst-size-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
+        <div id="luketekst-size-wrapper" class="toolbar-checkbox" style="display: none; gap: 6px;">
           <label for="select-luketekst-size">Tekststørrelse:</label>
           <select id="select-luketekst-size" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
             <option value="small">Liten</option>
