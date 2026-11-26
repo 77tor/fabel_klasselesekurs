@@ -1,3 +1,47 @@
+// ==========================================================================
+  // INNLOGGINGSSPERRE
+  // ==========================================================================
+  const VALID_USER = "Haanes";
+  const VALID_PASS = "Hest1234";
+  const AUTH_STORAGE_KEY = "fabel_authenticated_v1";
+
+  const loginOverlay = document.getElementById("login-overlay");
+  const loginForm = document.getElementById("login-form");
+  const loginUsername = document.getElementById("login-username");
+  const loginPassword = document.getElementById("login-password");
+  const loginError = document.getElementById("login-error");
+
+  function unlockSite() {
+    document.body.classList.remove("is-locked");
+    if (loginOverlay) loginOverlay.classList.add("hidden");
+  }
+
+  // Sjekk om brukeren allerede er logget inn i denne nettleseren
+  if (localStorage.getItem(AUTH_STORAGE_KEY) === "true") {
+    unlockSite();
+  } else {
+    document.body.classList.add("is-locked");
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const enteredUser = loginUsername.value.trim();
+      const enteredPass = loginPassword.value;
+
+      if (enteredUser === VALID_USER && enteredPass === VALID_PASS) {
+        localStorage.setItem(AUTH_STORAGE_KEY, "true");
+        if (loginError) loginError.style.display = "none";
+        unlockSite();
+      } else {
+        if (loginError) loginError.style.display = "block";
+        loginPassword.value = "";
+        loginPassword.focus();
+      }
+    });
+  }
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const TASK_TYPES = [
     { key: "stavelser", label: "Stavelser", color: "#d896ff" },
@@ -41,9 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("fabel_hidden_tasks", JSON.stringify(hiddenTasksMap));
   }
 
-  function showWelcomeScreen() {
+function showWelcomeScreen() {
     currentItemIndex = -1;
     currentTaskKey = null;
+    expandedBookName = null;     // <-- Lukker alle åpne bøker
+    expandedTextIndex = -1;      // <-- Lukker eventuell åpen tekst
     isEditing = false;
     if (editPanel) editPanel.style.display = "none";
     document.body.classList.add("is-welcome-screen");
@@ -52,7 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const sidebarHeader = document.querySelector(".sidebar-header");
   if (sidebarHeader) {
-    sidebarHeader.addEventListener("click", showWelcomeScreen);
+    sidebarHeader.addEventListener("click", (e) => {
+      // Unngå at klikk på tannhjul-knappen (innstillinger) lukker menyen
+      if (e.target.closest("button")) return;
+
+      showWelcomeScreen();
+    });
   }
 
   // AUTOMATISK SKJERMTILPASSET ZOOM OG FLYTENDE ZOOM-KONTROLL

@@ -25,6 +25,127 @@
 body { font-family: var(--font-main); background-color: #f0f2f5; color: #1a1a1a; display: flex; min-height: 100vh; }
 
 /* ==========================================================================
+   INNLOGGINGSSKJERM
+   ========================================================================== */
+body.is-locked {
+  overflow: hidden;
+}
+
+body.is-locked .sidebar,
+body.is-locked main,
+body.is-locked .zoom-controls {
+  visibility: hidden;
+}
+
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-overlay.hidden {
+  display: none;
+}
+
+.login-card {
+  background: #1e293b;
+  color: #f8fafc;
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 28px;
+  border-radius: 14px;
+  border: 1px solid #334155;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.login-logo {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+
+.login-card h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.login-card > p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 22px;
+}
+
+.login-field {
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.login-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-bottom: 5px;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-family: var(--font-main);
+}
+
+.login-field input:focus {
+  outline: 2px solid #3b82f6;
+  border-color: transparent;
+}
+
+.login-error {
+  color: #f87171;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 8px 0 12px;
+  text-align: left;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.login-btn:hover {
+  background: #2563eb;
+}
+
+@media print {
+  .login-overlay {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
    2. VENSTREMENY & INNSTILLINGER
    ========================================================================== */
 .sidebar { width: var(--sidebar-width); min-width: var(--sidebar-width); background: #1e293b; color: #f8fafc; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; flex-shrink: 0; }

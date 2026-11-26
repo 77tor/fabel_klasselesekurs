@@ -10,7 +10,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Comic+Neue:wght@400;700&family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+<div id="login-overlay" class="login-overlay">
+  <div class="login-card">
+    <img src="logo.png" alt="Fabel" class="login-logo" onerror="this.style.display='none'">
+    <h2>Fabel Klasselesekurs</h2>
+    <p>Logg inn for å få tilgang til oppgavearkene</p>
 
+    <form id="login-form" autocomplete="on">
+      <div class="login-field">
+        <label for="login-username">Brukernavn</label>
+        <input
+          type="text"
+          id="login-username"
+          name="username"
+          autocomplete="username"
+          required
+        />
+      </div>
+
+      <div class="login-field">
+        <label for="login-password">Passord</label>
+        <input
+          type="password"
+          id="login-password"
+          name="password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <p id="login-error" class="login-error" style="display: none;">
+        Feil brukernavn eller passord. Prøv igjen.
+      </p>
+
+      <button type="submit" class="login-btn">Logg inn</button>
+    </form>
+  </div>
+</div>
 <!-- VENSTREMENY (Skjules ved utskrift) -->
   <aside class="sidebar no-print">
     <div class="sidebar-header">
@@ -163,8 +199,6 @@
 
   <!-- DATAFILER 1.TRINN (VÅR) -->
   <script src="data/fabel1/fabel1-s64-65.js"></script>
-  <script src="data/fabel1/fabel1-s66-67.js"></script>
-  <script src="data/fabel1/fabel1-s68-69.js"></script>
   <script src="data/fabel1/fabel1-s72-73.js"></script>
   <script src="data/fabel1/fabel1-s74-75.js"></script>
   <script src="data/fabel1/fabel1-s78-79.js"></script>
@@ -173,7 +207,6 @@
   <script src="data/fabel1/fabel1-s86-87.js"></script>
   <script src="data/fabel1/fabel1-s88-89.js"></script>
   <script src="data/fabel1/fabel1-s90-91.js"></script>
-  <script src="data/fabel1/fabel1-s92-93.js"></script>
   <script src="data/fabel1/fabel1-s94-95.js"></script>
   <script src="data/fabel1/fabel1-s96-97.js"></script>
   <script src="data/fabel1/fabel1-s98-99.js"></script>
