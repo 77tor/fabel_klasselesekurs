@@ -52,3 +52,20 @@ window.FABEL_DATA.push({
         "larvenflytermedhodetned",
         "utavpuppenkrypermyggen",
         "jentadrikkerblod"
+      ]
+    },
+
+    // 5. LYDRETTE OG IKKE LYDRETTE ORD (Gul/oransje)
+    lydretteOrd: {
+      ord: ["mygg", "fly", "egg", "hodet", "tykt", "blod"],
+      antallRader: 7
+    },
+
+    // 6. GITTER (Olivengrønn)
+    gitter: {
+      ord: ["blomster", "drikker", "stikke", "puppen", "larven", "egg"],
+      monster: ["K", "K", "V", "K", "K", "K", "V", "K", "K", "V", "K", "K", "V", "K"],
+      antallRader: 6
+    }
+  }
+});
