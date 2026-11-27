@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s126-127",
   bok: "Fabel 1 (vår)",
+  tema: "Fotball",
   sidetall: "S.126-127",
   tittel: "Fotball i parken",
 

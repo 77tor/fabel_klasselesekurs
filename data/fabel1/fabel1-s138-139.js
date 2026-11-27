@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s138-139",
   bok: "Fabel 1 (vår)",
+  tema: "Sommer",
   sidetall: "S.138-139",
   tittel: "Den store festen",
 

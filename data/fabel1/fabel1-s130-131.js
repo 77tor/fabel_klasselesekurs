@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s130-131",
   bok: "Fabel 1 (vår)",
+  tema: "Fjæra",
   sidetall: "S.130-131",
   tittel: "Krabbefiske",
 

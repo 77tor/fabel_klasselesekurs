@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s132-133",
   bok: "Fabel 1 (vår)",
+  tema: "Fjæra",
   sidetall: "S.132-133",
   tittel: "Født som gutt",
 

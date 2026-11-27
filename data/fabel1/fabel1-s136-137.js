@@ -1,6 +1,7 @@
-	window.FABEL_DATA.push({
+window.FABEL_DATA.push({
   id: "fabel1-s136-137",
   bok: "Fabel 1 (vår)",
+  tema: "Sommer",
   sidetall: "S.136-137",
   tittel: "Snart er det sommer",
 

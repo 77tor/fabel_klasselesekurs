@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s94-95",
   bok: "Fabel 1 (vår)",
+  tema: "Trafikk",
   sidetall: "S.94-95",
   tittel: "Krysse veien",
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s80-81",
   bok: "Fabel 1 (vår)",
+  tema: "Vinter",
   sidetall: "S.80-81",
   tittel: "I helgen",
 

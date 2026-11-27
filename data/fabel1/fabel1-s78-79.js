@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s78-79",
   bok: "Fabel 1 (vår)",
+  tema: "Vinter",
   sidetall: "S.78-79",
   tittel: "Bjørnen sover",
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s110-111",
   bok: "Fabel 1 (vår)",
+  tema: "Sanser",
   sidetall: "S.110-111",
   tittel: "Mammas klem",
 

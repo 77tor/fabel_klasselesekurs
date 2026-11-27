@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s66-67",
   bok: "Fabel 1 (vår)",
+  tema: "Rim",
   sidetall: "S.66-67",
   tittel: "Større enn et ord",
 

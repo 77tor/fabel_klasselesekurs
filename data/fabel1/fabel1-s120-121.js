@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s120-121",
   bok: "Fabel 1 (vår)",
+  tema: "Insekter",
   sidetall: "S.120-121",
   tittel: "Mygg",
 

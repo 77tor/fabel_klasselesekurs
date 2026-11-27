@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s96-97",
   bok: "Fabel 1 (vår)",
+  tema: "Trafikk",
   sidetall: "S.96-97",
   tittel: "Sur tiger",
 

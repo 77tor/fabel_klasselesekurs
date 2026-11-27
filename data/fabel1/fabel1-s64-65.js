@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s64-65",
   bok: "Fabel 1 (vår)",
+  tema: "Språk",
   sidetall: "S.64-65",
   tittel: "Klassen lærer polsk",
 
@@ -9,7 +10,7 @@ window.FABEL_DATA.push({
     stavelser: {
       eksempelOrd: "Sjokolade",
       eksempelStavelser: ["sjo", "ko", "la", "de"],
-      ord: ["pakistan", "klassen", "snakke", "starter", "bytter", "hvilke", "polen"]
+      ord: ["pakistan", "snakke", "starter", "bytter", "hvilke", "polen"]
     },
 
     // 2. ORDSØK (Blå)

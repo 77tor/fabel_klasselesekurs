@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel1-s90-91",
   bok: "Fabel 1 (vår)",
+  tema: "Venner",
   sidetall: "S.90-91",
   tittel: "Du er syk, Frida",
 
