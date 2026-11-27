@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s28-31",
   bok: "Fabel 3a",
+  tema: "1. Hva sier du?",
   sidetall: "S.28-31",
   tittel: "Ny mobil", // Endre gjerne til teksttittelen i boka
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s12-17",
   bok: "Fabel 3a",
+  tema: "1. Hva sier du?",
   sidetall: "S.12-17",
   tittel: "Da detektivene tok ferie",
 

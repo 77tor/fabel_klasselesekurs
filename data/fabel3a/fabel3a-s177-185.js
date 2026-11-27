@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s177-185",
   bok: "Fabel 3a",
+  tema: "7. Hei, hå! Nå er det jul igjen!",
   sidetall: "S.177-185",
   tittel: "Julegavekanonen", // Endre til teksttittelen i boka
 

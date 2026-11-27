@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s146-149",
   bok: "Fabel 3a",
+  tema: "6. Hei, her er jeg!",
   sidetall: "S.146-149",
   tittel: "En hemmelig skatt", // Endre til teksttittelen i boka
 

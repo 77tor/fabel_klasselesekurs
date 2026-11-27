@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s128-131",
   bok: "Fabel 3a",
+  tema: "5. Husk lånekortet!",
   sidetall: "S.128-131",
   tittel: "Skolebiblioteket på Spangereid", // Endre til teksttittelen i boka
 

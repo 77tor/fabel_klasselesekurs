@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s78-81",
   bok: "Fabel 3a",
+  tema: "3. Grøss og gru",
   sidetall: "S.78-81",
   tittel: "Du trenger skrekk for å skremme",
 

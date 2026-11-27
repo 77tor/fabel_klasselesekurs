@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s154-159",
   bok: "Fabel 3a",
+  tema: "6. Hei, her er jeg!",
   sidetall: "S.154-159",
   tittel: "Hytta i Holum", // Endre til teksttittelen i boka
 

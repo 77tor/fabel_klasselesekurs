@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s120-121",
   bok: "Fabel 3a",
+  tema: "5. Husk lånekortet!",
   sidetall: "S.120-121",
   tittel: "Deichman",
 

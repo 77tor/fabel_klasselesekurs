@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s94-97",
   bok: "Fabel 3a",
+  tema: "4. Vi er forskjellige",
   sidetall: "S.94-97",
   tittel: "Dusjing i gymmen", // Endre gjerne til teksttittelen i boka
 

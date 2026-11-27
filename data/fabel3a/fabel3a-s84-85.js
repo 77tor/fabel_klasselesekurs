@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s84-85",
   bok: "Fabel 3a",
+  tema: "3. Grøss og gru",
   sidetall: "S.84-85",
   tittel: "Viktig å vite om alt som kan skremme deg", // Endre til teksttittelen i boka
 

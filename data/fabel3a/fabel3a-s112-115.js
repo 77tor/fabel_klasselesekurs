@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s112-115",
   bok: "Fabel 3a",
+  tema: "4. Vi er forskjellige",
   sidetall: "S.112-115",
   tittel: "Alice Andersen", // Endre til teksttittelen i boka
 

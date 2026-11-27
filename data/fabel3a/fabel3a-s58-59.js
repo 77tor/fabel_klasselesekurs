@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s58-59",
   bok: "Fabel 3a",
+  tema: "2. Bli en havekspert!",
   sidetall: "S.58-59",
   tittel: "Hvordan jobber en havforsker?", // Endre gjerne til teksttittelen i boka
 

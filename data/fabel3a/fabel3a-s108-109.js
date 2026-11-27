@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s108-109",
   bok: "Fabel 3a",
+  tema: "4. Vi er forskjellige",
   sidetall: "S.108-109",
   tittel: "Kjære dagbok", // Endre gjerne til teksttittelen i boka
 

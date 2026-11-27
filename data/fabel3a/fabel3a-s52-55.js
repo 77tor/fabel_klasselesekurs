@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s52-55",
   bok: "Fabel 3a",
+  tema: "2. Bli en havekspert!",
   sidetall: "S.52-55",
   tittel: "Alt lever av noe annet",
 

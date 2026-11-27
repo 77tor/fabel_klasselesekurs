@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s70-73",
   bok: "Fabel 3a",
+  tema: "3. Grøss og gru",
   sidetall: "S.70-73",
   tittel: "Naboen er en heks",
 

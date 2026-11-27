@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s162-165",
   bok: "Fabel 3a",
+  tema: "6. Hei, her er jeg!",
   sidetall: "S.162-165",
   tittel: "Jeg elsker fotball", // Endre til teksttittelen i boka
 

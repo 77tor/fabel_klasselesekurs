@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3a-s20-23",
   bok: "Fabel 3a",
+  tema: "1. Hva sier du?",
   sidetall: "S.20-23",
   tittel: "Vigg-Varg 4-2", // Endre gjerne til teksttittelen i boka
 
