@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s158-161",
   bok: "Fabel 3b",
+  tema: "6. Løgn og ærlighet",
   sidetall: "S.158-161",
   tittel: "Vekk fra det vanskelige", // Endre til teksttittelen i boka
 

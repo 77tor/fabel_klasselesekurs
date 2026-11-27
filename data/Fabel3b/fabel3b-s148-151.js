@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s148-151",
   bok: "Fabel 3b",
+  tema: "6. Løgn og ærlighet",
   sidetall: "S.148-151",
   tittel: "Lars, Lotte og Hannah", // Endre til teksttittelen i boka
 

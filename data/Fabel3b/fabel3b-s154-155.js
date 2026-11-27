@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s154-155",
   bok: "Fabel 3b",
+  tema: "6. Løgn og ærlighet",
   sidetall: "S.154-155",
   tittel: "For dem som er lei av maset", // Endre til teksttittelen i boka
 

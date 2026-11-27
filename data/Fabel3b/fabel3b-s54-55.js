@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s54-55",
   bok: "Fabel 3b",
+  tema: "2. Språket vårt",
   sidetall: "S.54-55",
   tittel: "Vi har to språk", // Endre til teksttittelen i boka
 

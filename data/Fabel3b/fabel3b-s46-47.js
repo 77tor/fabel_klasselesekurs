@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s46-47",
   bok: "Fabel 3b",
+  tema: "2. Språket vårt",
   sidetall: "S.46-47",
   tittel: "Farfars kryssord", // Endre til teksttittelen i boka
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s40-41",
   bok: "Fabel 3b",
+  tema: "2. Språket vårt",
   sidetall: "S.40-41",
   tittel: "Å møe koste softisen?", // Endre til teksttittelen i boka
 

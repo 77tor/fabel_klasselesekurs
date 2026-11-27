@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s62-65",
   bok: "Fabel 3b",
+  tema: "3. Superhelter",
   sidetall: "S.62-65",
   tittel: "Herbert og hunden", // Endre til teksttittelen i boka
 

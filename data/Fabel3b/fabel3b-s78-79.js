@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s78-79",
   bok: "Fabel 3b",
+  tema: "3. Superhelter",
   sidetall: "S.78-79",
   tittel: "Hva er en superhelt?", // Endre til teksttittelen i boka
 

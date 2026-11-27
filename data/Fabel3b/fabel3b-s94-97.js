@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s94-97",
   bok: "Fabel 3b",
+  tema: "4. Ut på tur",
   sidetall: "S.94-97",
   tittel: "Turister til Preikestolen", // Endre til teksttittelen i boka
 

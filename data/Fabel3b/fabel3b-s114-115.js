@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s114-115",
   bok: "Fabel 3b",
+  tema: "4. Ut på tur",
   sidetall: "S.114-115",
   tittel: "Sagnet om Torghatten", // Endre til teksttittelen i boka
 

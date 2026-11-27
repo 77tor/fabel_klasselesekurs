@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s124-127",
   bok: "Fabel 3b",
+  tema: "5. Bildebøker",
   sidetall: "S.124-127",
   tittel: "Det tar tid å finne ut hvordan noe skal se ut", // Endre til teksttittelen i boka
 

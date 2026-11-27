@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s130-131",
   bok: "Fabel 3b",
+  tema: "5. Bildebøker",
   sidetall: "S.130-131",
   tittel: "En tekst som mangler bilder", // Endre til teksttittelen i boka
 

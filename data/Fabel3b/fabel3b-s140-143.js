@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s140-143",
   bok: "Fabel 3b",
+  tema: "6. Løgn og ærlighet",
   sidetall: "S.140-143",
   tittel: "Turdag", // Endre til teksttittelen i boka
 

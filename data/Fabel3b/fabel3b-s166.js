@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s166",
   bok: "Fabel 3b",
+  tema: "7. Mot sommer",
   sidetall: "S.166",
   tittel: "Skriv og se hva som skjer", // Endre til teksttittelen i boka
 

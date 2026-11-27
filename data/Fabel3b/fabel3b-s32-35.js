@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s32-35",
   bok: "Fabel 3b",
+  tema: "1. Eventyr",
   sidetall: "S.32-35",
   tittel: "Pannekaka", // Endre til teksttittelen i boka
 

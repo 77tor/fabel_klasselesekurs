@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s102-105",
   bok: "Fabel 3b",
+  tema: "4. Ut på tur",
   sidetall: "S.102-105",
   tittel: "Isen laget fjord og fjell", // Endre til teksttittelen i boka
 

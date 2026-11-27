@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s178-179",
   bok: "Fabel 3b",
+  tema: "7. Mot sommer",
   sidetall: "S.178-179",
   tittel: "Brennende kjærlighet", // Endre til teksttittelen i boka
 

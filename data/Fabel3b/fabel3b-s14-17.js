@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s14-17",
   bok: "Fabel 3b",
+  tema: "1. Eventyr",
   sidetall: "S.14-17",
   tittel: "Gutten som kappåt med trollet",
 

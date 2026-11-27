@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel3b-s22-23",
   bok: "Fabel 3b",
+  tema: "1. Eventyr",
   sidetall: "S.22-23",
   tittel: "Hva er typisk for eventyr?", // Endre til teksttittelen i boka
 
