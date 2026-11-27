@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s10-11",
   bok: "Fabel 2 (høst)",
+  tema: "Venner",
   sidetall: "S.10-11",
   tittel: "Finner ikke bursdagskortet",
 

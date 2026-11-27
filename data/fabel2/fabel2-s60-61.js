@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s60-61",
   bok: "Fabel 2 (høst)",
+  tema: "Vær og klima",
   sidetall: "S.60-61",
   tittel: "Regn, yr, snø og hagl",
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s54-55",
   bok: "Fabel 2 (høst)",
+  tema: "Vær og klima",
   sidetall: "S.54-55",
   tittel: "En værmelding trenger ikke ord",
 

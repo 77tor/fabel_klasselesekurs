@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s68-69",
   bok: "Fabel 2 (høst)",
+  tema: "Hva mener du?",
   sidetall: "S.68-69",
   tittel: "Penest kledd i verden",
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s14-15",
   bok: "Fabel 2 (høst)",
+  tema: "Venner",
   sidetall: "S.14-15",
   tittel: "Hvorfor ventet du ikke?",
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s70-71",
   bok: "Fabel 2 (høst)",
+  tema: "Jul, jul!",
   sidetall: "S.70-71",
   tittel: "Barneombudet", // Endre til teksttittelen på s. 70-71
 

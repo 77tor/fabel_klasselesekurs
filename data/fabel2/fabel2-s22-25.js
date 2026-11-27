@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s22-25",
   bok: "Fabel 2 (høst)",
+  tema: "Skolen vår",
   sidetall: "S.22-25",
   tittel: "Den dagen rektor forsov seg", // Endre gjerne til teksttittelen i boka
 

@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s74-75",
   bok: "Fabel 2 (høst)",
+  tema: "Jul, jul!",
   sidetall: "S.74-75",
   tittel: "Endelig jul!",
 

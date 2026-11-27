@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s66-67",
   bok: "Fabel 2 (høst)",
+  tema: "Hva mener du?",
   sidetall: "S.66-67",
   tittel: "Viktig å lære å svømme", // Endre gjerne til eksakt teksttittel i boka
 

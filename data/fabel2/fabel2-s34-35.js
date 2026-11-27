@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s34-35",
   bok: "Fabel 2 (høst)",
+  tema: "Yrker",
   sidetall: "S.34-35",
   tittel: "Verdens beste baker",
 

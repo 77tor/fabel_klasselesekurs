@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s28-31",
   bok: "Fabel 2 (høst)",
+  tema: "Skolen vår",
   sidetall: "S.28-31",
   tittel: "På svømminga",
 

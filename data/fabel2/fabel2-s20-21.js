@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s20-21",
   bok: "Fabel 2 (høst)",
+  tema: "Skolen vår",
   sidetall: "S.20-21",
   tittel: "Det finnes regler for alt",
 

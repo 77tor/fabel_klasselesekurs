@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s44-45",
   bok: "Fabel 2 (høst)",
+  tema: "Simsalabim",
   sidetall: "S.44-45",
   tittel: "Majalinis trylleshow",
 

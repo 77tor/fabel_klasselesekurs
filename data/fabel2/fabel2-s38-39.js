@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s38-39",
   bok: "Fabel 2 (høst)",
+  tema: "Yrker",
   sidetall: "S.38-39",
   tittel: "En søppelhval",
 

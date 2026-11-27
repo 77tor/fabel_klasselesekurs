@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s64-65",
   bok: "Fabel 2 (høst)",
+  tema: "Hva mener du?",
   sidetall: "S.64-65",
   tittel: "Kosetime", // Endre gjerne til eksakt teksttittel i boka
 

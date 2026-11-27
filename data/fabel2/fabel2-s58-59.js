@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s58-59",
   bok: "Fabel 2 (høst)",
+  tema: "Vær og klima",
   sidetall: "S.58-59",
   tittel: "Hvorfor forandrer klimaet seg?",
 

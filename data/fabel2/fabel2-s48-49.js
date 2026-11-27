@@ -1,6 +1,7 @@
 window.FABEL_DATA.push({
   id: "fabel2-s48-49",
   bok: "Fabel 2 (høst)",
+  tema: "Simsalabim",
   sidetall: "S.48-49",
   tittel: "Tirkumtur i Tyrkia",
 
