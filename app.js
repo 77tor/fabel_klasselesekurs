@@ -1330,6 +1330,40 @@ function getBookThemeColors(bookName) {
     return { main: "#2b7de9", soft: "#f0f7ff", border: "#bfdbfe", dark: "#1e3a8a" };
   }
 
+
+function getThemeCoverVisualHTML(themeName, logoSrc) {
+    // Fjerner eventuelt tall og punktum foran, f.eks. "1. Eventyr" -> "Eventyr"
+    const cleanName = (themeName || "").trim().replace(/^\d+\.\s*/, "");
+    const slug = cleanName
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    const slugSrc = `bilder/${slug}.png`;
+    const exactSrc = `bilder/${cleanName}.png`;
+
+    if (!cleanName) {
+      return logoSrc ? `<img src="${logoSrc}" alt="Fabel" class="cover-hero-logo" />` : "";
+    }
+
+    // Prøver først bilder/eventyr.png -> deretter bilder/Eventyr.png -> til slutt Fabel-logo
+    return `
+      <div class="cover-theme-visual">
+        <img
+          src="${slugSrc}"
+          alt="${cleanName}"
+          class="cover-theme-image"
+          data-exact-src="${exactSrc}"
+          onerror="if (this.dataset.triedExact !== '1') { this.dataset.triedExact = '1'; this.src = this.dataset.exactSrc; } else { this.style.display = 'none'; if (this.nextElementSibling) this.nextElementSibling.style.display = 'block'; }"
+        />
+        ${logoSrc ? `<img src="${logoSrc}" alt="Fabel" class="cover-hero-logo cover-logo-fallback" style="display:none;" />` : ""}
+      </div>
+    `;
+  }
+
   function buildThemeCoverSheet(bookName, themeName, entries, includeToc, includePageNum) {
     const cover = document.createElement("div");
     cover.className = "a4-sheet batch-print-sheet theme-cover-sheet";
@@ -1342,6 +1376,7 @@ function getBookThemeColors(bookName) {
     cover.style.setProperty("--book-dark", colors.dark);
 
     const logoSrc = document.querySelector(".sidebar-logo")?.getAttribute("src") || "";
+    const heroVisualHtml = getThemeCoverVisualHTML(themeName, logoSrc);
 
     let pageCursor = 2;
     const tocRowsHtml = entries.map(entry => {
@@ -1371,7 +1406,7 @@ function getBookThemeColors(bookName) {
         </div>
 
         <div class="cover-hero">
-          ${logoSrc ? `<img src="${logoSrc}" alt="Fabel" class="cover-hero-logo" />` : ""}
+          ${heroVisualHtml}
           <h1 class="cover-title">${themeName}</h1>
           <p class="cover-subtitle">Klasselesekurs og arbeidsoppgaver til temaet</p>
         </div>
@@ -1395,6 +1430,7 @@ function getBookThemeColors(bookName) {
 
     return cover;
   }
+
 
 
   function executeThemePrint(onAfterPrintCallback = null) {

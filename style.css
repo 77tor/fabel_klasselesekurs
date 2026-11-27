@@ -618,3 +618,25 @@ body.show-gitter-fasit .gitter-fasit-letter { display: inline; }
     z-index: 20 !important;
   }
 }
+
+.cover-theme-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cover-theme-image {
+  width: 360px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 2.5px solid var(--book-border, #cbd5e1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  display: block;
+}
+
+.cover-logo-fallback {
+  margin: 0 auto;
+}
