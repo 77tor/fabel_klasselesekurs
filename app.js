@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let expandedTextIndex = null; // Starter minimert
   let currentTaskKey = null;
   let isEditing = false;
+  let expandedThemeName = null;
+  let ordkjedeFontSize = localStorage.getItem("fabel_ordkjede_size") || "medium";
 
   const menuContainer = document.getElementById("menu-container");
   const worksheetEl = document.getElementById("worksheet");
@@ -89,6 +91,7 @@ function showWelcomeScreen() {
     currentItemIndex = -1;
     currentTaskKey = null;
     expandedBookName = null;     // <-- Lukker alle åpne bøker
+    expandedThemeName = null;    // <-- Lukker alle åpne temaer
     expandedTextIndex = -1;      // <-- Lukker eventuell åpen tekst
     isEditing = false;
     if (editPanel) editPanel.style.display = "none";
@@ -207,8 +210,7 @@ function showWelcomeScreen() {
     editPanel.addEventListener("pointercancel", stopDrag);
   }
 
-
-// 1. BYGG VENSTREMENY GRUPPERT ETTER BOK
+// 1. BYGG VENSTREMENY GRUPPERT ETTER BOK (OG EVENTUELT TEMA)
   function buildMenu() {
     menuContainer.innerHTML = "";
     const books = {};
@@ -217,6 +219,146 @@ function showWelcomeScreen() {
       if (!books[item.bok]) books[item.bok] = [];
       books[item.bok].push({ ...item, index });
     });
+
+    function renderTextItem(textItem, parentContainer, bookName, themeName = null) {
+      if (textItem.underKonstruksjon) {
+        const textGroup = document.createElement("div");
+        textGroup.className = "menu-text-group collapsed";
+
+        const headerRow = document.createElement("div");
+        headerRow.className = "menu-text-row";
+
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "menu-text-header";
+        infoDiv.style.cursor = "default";
+        infoDiv.style.opacity = "0.7";
+        infoDiv.innerHTML = `<span class="text-label" style="font-style: italic;">${textItem.sidetall} – ${textItem.tittel}</span>`;
+
+        headerRow.appendChild(infoDiv);
+        textGroup.appendChild(headerRow);
+        parentContainer.appendChild(textGroup);
+        return;
+      }
+
+      const isExpanded = textItem.index === expandedTextIndex;
+      const isCurrentActiveText = textItem.index === currentItemIndex;
+
+      const textGroup = document.createElement("div");
+      textGroup.className = `menu-text-group ${isExpanded ? "expanded" : "collapsed"}`;
+
+      const headerRow = document.createElement("div");
+      headerRow.className = `menu-text-row ${isCurrentActiveText ? "is-active-text" : ""}`;
+
+      const headerBtn = document.createElement("button");
+      headerBtn.type = "button";
+      headerBtn.className = "menu-text-header";
+      headerBtn.innerHTML = `
+        <span class="text-label">${textItem.sidetall} – ${textItem.tittel}</span>
+        <span class="chevron">${isExpanded ? "▾" : "▸"}</span>
+      `;
+
+      headerBtn.addEventListener("click", () => {
+        const firstTask = TASK_TYPES.find(t => textItem.oppgaver[t.key] && !isTaskHidden(textItem.index, t.key));
+        if (!firstTask) return;
+
+        document.body.classList.remove("is-welcome-screen");
+        expandedBookName = bookName;
+        expandedThemeName = themeName;
+        expandedTextIndex = textItem.index;
+        currentItemIndex = textItem.index;
+        currentTaskKey = firstTask.key;
+
+        buildMenu();
+        renderWorksheet();
+        if (isEditing) renderEditPanel();
+
+        const mainArea = worksheetEl.closest("main") || document.documentElement;
+        mainArea.scrollTo({ top: 0, behavior: "instant" });
+        window.scrollTo({ top: 0, behavior: "instant" });
+      });
+
+      const printAllBtn = document.createElement("button");
+      printAllBtn.type = "button";
+      printAllBtn.className = "menu-print-all-btn";
+      printAllBtn.title = `Skriv ut alle synlige oppgaveark for ${textItem.tittel}`;
+      printAllBtn.textContent = "🖨️";
+      printAllBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        printAllForText(textItem.index);
+      });
+
+      headerRow.appendChild(headerBtn);
+      headerRow.appendChild(printAllBtn);
+      textGroup.appendChild(headerRow);
+
+      const ul = document.createElement("ul");
+      ul.className = "menu-task-list";
+
+      TASK_TYPES.forEach(task => {
+        if (!textItem.oppgaver[task.key]) return;
+        const hidden = isTaskHidden(textItem.index, task.key);
+
+        const li = document.createElement("li");
+        li.className = `menu-task-row ${hidden ? "is-hidden-task" : ""}`;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "menu-task-btn";
+        btn.dataset.taskKey = task.key;
+        btn.dataset.itemIndex = textItem.index;
+        if (!hidden && isCurrentActiveText && task.key === currentTaskKey) {
+          btn.classList.add("active");
+        }
+        btn.innerHTML = `<span class="dot" style="background:${task.color}"></span><span class="task-label">${task.label}</span>`;
+        btn.addEventListener("click", () => {
+          if (isTaskHidden(textItem.index, task.key)) return;
+          const isSameText = !document.body.classList.contains("is-welcome-screen") && currentItemIndex === textItem.index;
+          document.body.classList.remove("is-welcome-screen");
+          currentItemIndex = textItem.index;
+          expandedTextIndex = textItem.index;
+          expandedBookName = textItem.bok;
+          expandedThemeName = themeName;
+          currentTaskKey = task.key;
+
+          if (!isSameText) {
+            buildMenu();
+            renderWorksheet();
+          } else {
+            updateActiveTaskUI(task.key);
+          }
+          if (isEditing) renderEditPanel();
+
+          const targetSheet = document.querySelector(`.a4-sheet[data-task-key="${task.key}"]`);
+          if (targetSheet) {
+            isProgrammaticScroll = true;
+            targetSheet.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => { isProgrammaticScroll = false; }, 650);
+          }
+        });
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.type = "button";
+        toggleBtn.className = "menu-task-toggle-btn";
+        toggleBtn.title = hidden ? `Vis ${task.label} igjen` : `Skjul ${task.label}`;
+        toggleBtn.textContent = hidden ? "🚫" : "👁️";
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleTaskVisibility(textItem.index, task.key);
+          buildMenu();
+          if (!document.body.classList.contains("is-welcome-screen") && currentItemIndex === textItem.index) {
+            renderWorksheet();
+            if (isEditing) renderEditPanel();
+          }
+        });
+
+        li.appendChild(btn);
+        li.appendChild(toggleBtn);
+        ul.appendChild(li);
+      });
+
+      textGroup.appendChild(ul);
+      parentContainer.appendChild(textGroup);
+    }
 
     Object.keys(books).sort().forEach(bookName => {
       const isBookExpanded = bookName === expandedBookName;
@@ -232,154 +374,79 @@ function showWelcomeScreen() {
       textsDiv.className = "menu-texts";
       textsDiv.style.display = isBookExpanded ? "block" : "none";
 
-      // Klikk på boktittel åpner denne boken og minimerer alle andre bøker
       titleDiv.addEventListener("click", () => {
         expandedBookName = isBookExpanded ? null : bookName;
         buildMenu();
       });
 
+      const hasThemes = books[bookName].some(item => item.tema);
 
-books[bookName].forEach(textItem => {
-        // Egen visning for bøker/bolker under konstruksjon (uten 6 ark eller print-knapp)
-        if (textItem.underKonstruksjon) {
-          const textGroup = document.createElement("div");
-          textGroup.className = "menu-text-group collapsed";
-
-          const headerRow = document.createElement("div");
-          headerRow.className = "menu-text-row";
-
-          const infoDiv = document.createElement("div");
-          infoDiv.className = "menu-text-header";
-          infoDiv.style.cursor = "default";
-          infoDiv.style.opacity = "0.7";
-          infoDiv.innerHTML = `<span class="text-label" style="font-style: italic;">${textItem.sidetall} – ${textItem.tittel}</span>`;
-
-          headerRow.appendChild(infoDiv);
-          textGroup.appendChild(headerRow);
-          textsDiv.appendChild(textGroup);
-          return;
-        }
-
-        const isExpanded = textItem.index === expandedTextIndex;
-        const isCurrentActiveText = textItem.index === currentItemIndex;
-
-        const textGroup = document.createElement("div");
-        textGroup.className = `menu-text-group ${isExpanded ? "expanded" : "collapsed"}`;
-
-        // Rad med teksttittel + "Skriv ut alle"-knapp til høyre
-        const headerRow = document.createElement("div");
-        headerRow.className = `menu-text-row ${isCurrentActiveText ? "is-active-text" : ""}`;
-
-        const headerBtn = document.createElement("button");
-        headerBtn.type = "button";
-        headerBtn.className = "menu-text-header";
-        headerBtn.innerHTML = `
-          <span class="text-label">${textItem.sidetall} – ${textItem.tittel}</span>
-          <span class="chevron">${isExpanded ? "▾" : "▸"}</span>
-        `;
-
-        // Klikk på teksttittelen åpner hele oppgavebolken og starter øverst på første synlige ark
-        headerBtn.addEventListener("click", () => {
-          const firstTask = TASK_TYPES.find(t => textItem.oppgaver[t.key] && !isTaskHidden(textItem.index, t.key));
-          if (!firstTask) return;
-
-          document.body.classList.remove("is-welcome-screen");
-          expandedBookName = bookName;
-          expandedTextIndex = textItem.index;
-          currentItemIndex = textItem.index;
-          currentTaskKey = firstTask.key;
-
-          buildMenu();
-          renderWorksheet();
-          if (isEditing) renderEditPanel();
-
-          const mainArea = worksheetEl.closest("main") || document.documentElement;
-          mainArea.scrollTo({ top: 0, behavior: "instant" });
-          window.scrollTo({ top: 0, behavior: "instant" });
+      if (hasThemes) {
+        const themes = {};
+        books[bookName].forEach(item => {
+          const tName = item.tema || "Øvrige tekster";
+          if (!themes[tName]) themes[tName] = [];
+          themes[tName].push(item);
         });
 
-        const printAllBtn = document.createElement("button");
-        printAllBtn.type = "button";
-        printAllBtn.className = "menu-print-all-btn";
-        printAllBtn.title = `Skriv ut alle synlige oppgaveark for ${textItem.tittel}`;
-        printAllBtn.textContent = "🖨️";
-        printAllBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          printAllForText(textItem.index);
-        });
+Object.keys(themes).forEach(themeName => {
+          const themeKey = `${bookName}::${themeName}`;
+          const isThemeExpanded = themeKey === expandedThemeName;
 
-        headerRow.appendChild(headerBtn);
-        headerRow.appendChild(printAllBtn);
-        textGroup.appendChild(headerRow);
+          const themeGroup = document.createElement("div");
+          themeGroup.className = `menu-theme-group ${isThemeExpanded ? "expanded" : "collapsed"}`;
 
-        const ul = document.createElement("ul");
-        ul.className = "menu-task-list";
+          // Rad med temanavn + "Skriv ut alle i tema"-knapp til høyre
+          const themeRow = document.createElement("div");
+          themeRow.className = "menu-theme-row";
 
-        TASK_TYPES.forEach(task => {
-          if (!textItem.oppgaver[task.key]) return;
-          const hidden = isTaskHidden(textItem.index, task.key);
+          const themeHeader = document.createElement("button");
+          themeHeader.type = "button";
+          themeHeader.className = "menu-theme-header";
+          themeHeader.innerHTML = `
+            <span class="theme-label">📂 ${themeName}</span>
+            <span class="chevron">${isThemeExpanded ? "▾" : "▸"}</span>
+          `;
 
-          const li = document.createElement("li");
-          li.className = `menu-task-row ${hidden ? "is-hidden-task" : ""}`;
-
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "menu-task-btn";
-          btn.dataset.taskKey = task.key;
-          btn.dataset.itemIndex = textItem.index;
-          if (!hidden && isCurrentActiveText && task.key === currentTaskKey) {
-            btn.classList.add("active");
-          }
-          btn.innerHTML = `<span class="dot" style="background:${task.color}"></span><span class="task-label">${task.label}</span>`;
-          btn.addEventListener("click", () => {
-            if (isTaskHidden(textItem.index, task.key)) return;
-            const isSameText = !document.body.classList.contains("is-welcome-screen") && currentItemIndex === textItem.index;
-            document.body.classList.remove("is-welcome-screen");
-            currentItemIndex = textItem.index;
-            expandedTextIndex = textItem.index;
-            expandedBookName = textItem.bok;
-            currentTaskKey = task.key;
-
-            if (!isSameText) {
-              buildMenu();
-              renderWorksheet();
-            } else {
-              updateActiveTaskUI(task.key);
-            }
-            if (isEditing) renderEditPanel();
-
-            const targetSheet = document.querySelector(`.a4-sheet[data-task-key="${task.key}"]`);
-            if (targetSheet) {
-              isProgrammaticScroll = true;
-              targetSheet.scrollIntoView({ behavior: "smooth", block: "start" });
-              setTimeout(() => { isProgrammaticScroll = false; }, 650);
-            }
-          });
-
-          const toggleBtn = document.createElement("button");
-          toggleBtn.type = "button";
-          toggleBtn.className = "menu-task-toggle-btn";
-          toggleBtn.title = hidden ? `Vis ${task.label} igjen` : `Skjul ${task.label}`;
-          toggleBtn.textContent = hidden ? "🚫" : "👁️";
-          toggleBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleTaskVisibility(textItem.index, task.key);
+          themeHeader.addEventListener("click", () => {
+            expandedThemeName = isThemeExpanded ? null : themeKey;
             buildMenu();
-            if (!document.body.classList.contains("is-welcome-screen") && currentItemIndex === textItem.index) {
-              renderWorksheet();
-              if (isEditing) renderEditPanel();
-            }
           });
 
-          li.appendChild(btn);
-          li.appendChild(toggleBtn);
-          ul.appendChild(li);
+         themeRow.appendChild(themeHeader);
+
+          const hasPrintableItems = themes[themeName].some(item => !item.underKonstruksjon);
+          if (hasPrintableItems) {
+            const printThemeBtn = document.createElement("button");
+            printThemeBtn.type = "button";
+            printThemeBtn.className = "menu-print-all-btn";
+            printThemeBtn.title = `Skriv ut temahefte for «${themeName}»`;
+            printThemeBtn.textContent = "🖨️";
+            printThemeBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              openThemePrintModal(themes[themeName], themeName, bookName);
+            });
+            themeRow.appendChild(printThemeBtn);
+          }
+
+          const themeTextsDiv = document.createElement("div");
+          themeTextsDiv.className = "menu-theme-texts";
+          themeTextsDiv.style.display = isThemeExpanded ? "block" : "none";
+
+          themes[themeName].forEach(textItem => {
+            renderTextItem(textItem, themeTextsDiv, bookName, themeKey);
+          });
+
+          themeGroup.appendChild(themeRow);
+          themeGroup.appendChild(themeTextsDiv);
+          textsDiv.appendChild(themeGroup);
         });
 
-        textGroup.appendChild(ul);
-        textsDiv.appendChild(textGroup);
-      });
-
+      } else {
+        books[bookName].forEach(textItem => {
+          renderTextItem(textItem, textsDiv, bookName, null);
+        });
+      }
 
       bookDiv.appendChild(titleDiv);
       bookDiv.appendChild(textsDiv);
@@ -387,15 +454,17 @@ books[bookName].forEach(textItem => {
     });
   }
 
-  function updateActiveMenu() {
-    if (workingData[currentItemIndex]) {
-      expandedBookName = workingData[currentItemIndex].bok;
+function updateActiveMenu() {
+    const item = workingData[currentItemIndex];
+    if (item) {
+      expandedBookName = item.bok;
+      expandedThemeName = item.tema ? `${item.bok}::${item.tema}` : null;
     }
     buildMenu();
   }
 
 
-// HJELPEFUNKSJON: Topplinje med Bok og Sidetall
+
 // HJELPEFUNKSJON: Topplinje/bunntekst med Bok, (valgfri tittel) og Sidetall
   function getHeaderHTML(item) {
     // Gjør om "S.10-11" eller "s. 10-11" til "side 10-11"
@@ -423,6 +492,8 @@ books[bookName].forEach(textItem => {
 
 function buildSilhuettHTML(word) {
   const mode = localStorage.getItem("fabel_silhuett_type") || "vanlig";
+  const len = word.trim().length;
+  const sizeClass = len >= 11 ? " word-xlong" : (len >= 9 ? " word-long" : "");
 
   // 1. VANLIG SILHUETT (eksisterende logikk)
   if (mode !== "tilpasset") {
@@ -434,7 +505,7 @@ function buildSilhuettHTML(word) {
       else if (descenders.includes(ch)) cls += " desc";
       return `<div class="${cls}"></div>`;
     }).join("");
-    return `<div class="silhuett-word">${boxes}</div>`;
+    return `<div class="silhuett-word${sizeClass}">${boxes}</div>`;
   }
 
   // 2. TILPASSET SILHUETT (SVG med bokstavspesifikke former og bredder)
@@ -495,13 +566,15 @@ function buildSilhuettHTML(word) {
     curX += def.w;
   });
 
-  const pad = STROKE;
+const pad = STROKE;
   const totalW = curX + pad * 2;
   const totalH = yBot + pad * 2;
+  const maxAllowedW = 285;
+  const scale = totalW > maxAllowedW ? (maxAllowedW / totalW) : 1;
 
   return `
-    <div class="silhuett-word silhuett-custom">
-      <svg width="${totalW}" height="${totalH}" viewBox="${-pad} ${-pad} ${totalW} ${totalH}" style="display:block; overflow:visible;">
+    <div class="silhuett-word silhuett-custom${sizeClass}">
+      <svg width="${Math.round(totalW * scale)}" height="${Math.round(totalH * scale)}" viewBox="${-pad} ${-pad} ${totalW} ${totalH}" style="display:block; overflow:visible;">
         ${polygons}
       </svg>
     </div>
@@ -716,8 +789,8 @@ function buildSilhuettHTML(word) {
     return { monster, findStart };
   }
 
-  // 2. RENDER VALGT OPPGAVEARK
-function renderSingleSheetToEl(taskKey) {
+// 2. RENDER VALGT OPPGAVEARK
+  function renderSingleSheetToEl(taskKey) {
     const prevKey = currentTaskKey;
     currentTaskKey = taskKey;
 
@@ -733,50 +806,55 @@ function renderSingleSheetToEl(taskKey) {
     if (explainWrapper) {
       explainWrapper.style.display = currentTaskKey === "lydretteOrd" ? "inline-flex" : "none";
     }
-const gitterWrapper = document.getElementById("gitter-helper-wrapper");
+    const gitterWrapper = document.getElementById("gitter-helper-wrapper");
     if (gitterWrapper) {
       gitterWrapper.style.display = currentTaskKey === "gitter" ? "inline-flex" : "none";
     }
-const gitterFasitWrapper = document.getElementById("gitter-fasit-wrapper");
+    const gitterFasitWrapper = document.getElementById("gitter-fasit-wrapper");
     if (gitterFasitWrapper) {
       gitterFasitWrapper.style.display = currentTaskKey === "gitter" ? "inline-flex" : "none";
     }
-const ordsokFasitWrapper = document.getElementById("ordsok-fasit-wrapper");
+    const ordsokFasitWrapper = document.getElementById("ordsok-fasit-wrapper");
     if (ordsokFasitWrapper) {
       ordsokFasitWrapper.style.display = currentTaskKey === "ordsok" ? "inline-flex" : "none";
     }
-const ordsokDirWrapper = document.getElementById("ordsok-dir-wrapper");
+    const ordsokDirWrapper = document.getElementById("ordsok-dir-wrapper");
     if (ordsokDirWrapper) {
       ordsokDirWrapper.style.display = currentTaskKey === "ordsok" ? "inline-flex" : "none";
     }
-const ordsokCaseWrapper = document.getElementById("ordsok-case-wrapper");
+    const ordsokCaseWrapper = document.getElementById("ordsok-case-wrapper");
     if (ordsokCaseWrapper) {
       ordsokCaseWrapper.style.display = currentTaskKey === "ordsok" ? "inline-flex" : "none";
     }
-const luketekstSizeWrapper = document.getElementById("luketekst-size-wrapper");
+    const luketekstSizeWrapper = document.getElementById("luketekst-size-wrapper");
     if (luketekstSizeWrapper) {
       luketekstSizeWrapper.style.display = currentTaskKey === "luketekst" ? "inline-flex" : "none";
     }
-const silhuettOrdkjederWrap = document.getElementById("silhuett-ordkjeder-wrapper");
-  if (silhuettOrdkjederWrap) {
-    silhuettOrdkjederWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
-  }
-const silhuettLinjerWrap = document.getElementById("silhuett-linjer-wrapper");
-  if (silhuettLinjerWrap) {
-    silhuettLinjerWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
-  }
-const silhuettTypeWrap = document.getElementById("silhuett-type-wrapper");
-  if (silhuettTypeWrap) {
-    silhuettTypeWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
-  }
+    const silhuettOrdkjederWrap = document.getElementById("silhuett-ordkjeder-wrapper");
+    if (silhuettOrdkjederWrap) {
+      silhuettOrdkjederWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
+    }
+    const silhuettLinjerWrap = document.getElementById("silhuett-linjer-wrapper");
+    if (silhuettLinjerWrap) {
+      silhuettLinjerWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
+    }
+    const silhuettTypeWrap = document.getElementById("silhuett-type-wrapper");
+    if (silhuettTypeWrap) {
+      silhuettTypeWrap.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
+    }
+    const ordkjedeSizeCtrl = document.getElementById("ordkjede-size-control");
+    if (ordkjedeSizeCtrl) {
+      ordkjedeSizeCtrl.style.display = currentTaskKey === "silhuettOgOrdkjeder" ? "inline-flex" : "none";
+    }
+
     breadcrumbEl.textContent = `${item.bok} › ${item.sidetall} (${item.tittel}) › ${taskMeta.label}`;
 
     // Sjekk om data er endret fra original for å vise/skjule tilbakestill-knapp
     const isModified = JSON.stringify(item.oppgaver[currentTaskKey]) !== JSON.stringify(originalData[currentItemIndex].oppgaver[currentTaskKey]);
     btnReset.style.display = isModified ? "inline-block" : "none";
 
-    // Sett riktig fargetema på A4-arket
-    worksheetEl.className = "a4-sheet";
+    // Sett riktig fargetema og valgt ordkjedestørrelse på A4-arket
+    worksheetEl.className = `a4-sheet ordkjede-size-${ordkjedeFontSize}`;
 
     if (currentTaskKey === "stavelser") {
       worksheetEl.classList.add("theme-stavelser");
@@ -807,7 +885,7 @@ const silhuettTypeWrap = document.getElementById("silhuett-type-wrapper");
       `;
     }
 
-else if (currentTaskKey === "ordsok") {
+    else if (currentTaskKey === "ordsok") {
       worksheetEl.classList.add("theme-ordsok");
 
       const dirSelect = document.getElementById("select-ordsok-dir");
@@ -828,7 +906,7 @@ else if (currentTaskKey === "ordsok") {
       ).join("");
       const chips = displayWords.map(w => `<span class="word-chip">${w}</span>`).join("");
 
-worksheetEl.innerHTML = `
+      worksheetEl.innerHTML = `
         <div class="sheet-inner-white">
           ${getHeaderHTML(item)}
           <h2 class="sheet-title">ORDSØK</h2>
@@ -843,7 +921,7 @@ worksheetEl.innerHTML = `
       `;
     }
 
-else if (currentTaskKey === "luketekst") {
+    else if (currentTaskKey === "luketekst") {
       worksheetEl.classList.add("theme-luketekst");
       const bankRows = taskData.ordbank.map(w => `<tr><td>${w}</td></tr>`).join("");
       const formattedText = taskData.tekst
@@ -872,7 +950,7 @@ else if (currentTaskKey === "luketekst") {
       `;
     }
 
-else if (currentTaskKey === "silhuettOgOrdkjeder") {
+    else if (currentTaskKey === "silhuettOgOrdkjeder") {
       worksheetEl.classList.add("theme-silhuett");
       // Lag 2 rader x 3 kolonner for ordbanken
       const b = taskData.silhuettOrdBank;
@@ -895,7 +973,7 @@ else if (currentTaskKey === "silhuettOgOrdkjeder") {
       `).join("");
       const kjederHTML = taskData.ordkjeder.map(k => `<div>${k}</div>`).join("");
 
-worksheetEl.innerHTML = `
+      worksheetEl.innerHTML = `
         <div class="sheet-inner-white">
           ${getHeaderHTML(item)}
           <h2 class="sheet-title">SILHUETT-ORD</h2>
@@ -943,13 +1021,13 @@ worksheetEl.innerHTML = `
       `;
     }
 
-else if (currentTaskKey === "gitter") {
+    else if (currentTaskKey === "gitter") {
       worksheetEl.classList.add("theme-gitter");
       const wordRows = taskData.ord.map(w => `<tr><td>${w}</td></tr>`).join("");
 
       // Bygg felles K/V-mønster som garantert har plass til alle ordene i oppgaven
       const { monster, findStart } = buildGitterLayout(taskData.ord);
-const kvHeader = monster.map(kv => 
+      const kvHeader = monster.map(kv => 
         `<td class="kv-header-cell ${kv === 'K' ? 'kv-header-k' : 'kv-header-v'}">${kv}</td>`
       ).join("");
 
@@ -1014,8 +1092,7 @@ const kvHeader = monster.map(kv =>
         </div>
       `;
     }
-}
-
+  }
 
 // OPPDATER MENY-MARKERING OG TOPPLINJE NÅR DU SKROLLER MELLOM ARK
   function updateActiveTaskUI(taskKey) {
@@ -1042,7 +1119,7 @@ const kvHeader = monster.map(kv =>
       sheet.classList.toggle("is-current-sheet", sheet.dataset.taskKey === taskKey);
     });
 
-    // Vis riktige oppgavespesifikke innstillinger i verktøylinjen
+// Vis riktige oppgavespesifikke innstillinger i verktøylinjen
     const toggleMap = {
       "lydrette-explain-wrapper": "lydretteOrd",
       "gitter-helper-wrapper": "gitter",
@@ -1053,7 +1130,8 @@ const kvHeader = monster.map(kv =>
       "luketekst-size-wrapper": "luketekst",
       "silhuett-ordkjeder-wrapper": "silhuettOgOrdkjeder",
       "silhuett-linjer-wrapper": "silhuettOgOrdkjeder",
-      "silhuett-type-wrapper": "silhuettOgOrdkjeder"
+      "silhuett-type-wrapper": "silhuettOgOrdkjeder",
+      "ordkjede-size-control": "silhuettOgOrdkjeder"
     };
     Object.entries(toggleMap).forEach(([elId, key]) => {
       const el = document.getElementById(elId);
@@ -1135,6 +1213,7 @@ const kvHeader = monster.map(kv =>
 
     const prevItemIndex = currentItemIndex;
     const prevTaskKey = currentTaskKey;
+    const wasWelcomeScreen = document.body.classList.contains("is-welcome-screen");
     const parent = worksheetEl.parentNode;
 
     // Fjern eventuelle gamle utskriftsark før nye lages
@@ -1158,11 +1237,15 @@ const kvHeader = monster.map(kv =>
     currentItemIndex = prevItemIndex;
     currentTaskKey = prevTaskKey;
 
+    document.body.classList.remove("is-welcome-screen");
     document.body.classList.add("printing-all-sheets");
     parent.appendChild(allSheetsFragment);
 
     const cleanup = () => {
       document.body.classList.remove("printing-all-sheets");
+      if (wasWelcomeScreen) {
+        document.body.classList.add("is-welcome-screen");
+      }
       parent.querySelectorAll(".batch-print-sheet").forEach(el => el.remove());
       window.removeEventListener("afterprint", cleanup);
     };
@@ -1170,10 +1253,309 @@ const kvHeader = monster.map(kv =>
     window.addEventListener("afterprint", cleanup);
     setTimeout(() => {
       window.print();
-      // Fallback hvis nettleseren ikke fyrer afterprint ved avbrudd
       setTimeout(cleanup, 1000);
     }, 50);
   }
+
+// ==========================================================================
+  // TEMAHEFTE: MODAL, FORSIDE, INNHOLDSFORTEGNELSE & PDF-FLYT
+  // ==========================================================================
+  let pendingThemePrint = null;
+
+  function openThemePrintModal(themeItems, themeName, bookName) {
+    pendingThemePrint = { themeItems, themeName, bookName };
+
+    const subtitleEl = document.getElementById("print-modal-theme-subtitle");
+    if (subtitleEl) subtitleEl.textContent = `${bookName} – ${themeName}`;
+
+    updateThemePrintEstimate();
+    document.getElementById("print-options-modal")?.classList.remove("hidden");
+  }
+
+  function getVisibleThemeSheets(themeItems) {
+    const entries = [];
+    themeItems.forEach(textItem => {
+      if (textItem.underKonstruksjon) return;
+      const item = workingData[textItem.index];
+      if (!item || !item.oppgaver) return;
+
+      const visibleTasks = TASK_TYPES.filter(
+        t => item.oppgaver[t.key] && !isTaskHidden(textItem.index, t.key)
+      );
+      if (visibleTasks.length > 0) {
+        entries.push({ textItem, item, visibleTasks });
+      }
+    });
+    return entries;
+  }
+
+  function updateThemePrintEstimate() {
+    if (!pendingThemePrint) return;
+    const includeCover = document.getElementById("print-include-cover")?.checked;
+    const tocCheckbox = document.getElementById("print-include-toc");
+    const tocRow = document.getElementById("print-toc-row");
+
+    // Innholdsfortegnelse ligger på forsiden; deaktiver valget hvis forside er slått av
+    if (tocCheckbox && tocRow) {
+      tocCheckbox.disabled = !includeCover;
+      tocRow.style.opacity = includeCover ? "1" : "0.5";
+    }
+
+    const entries = getVisibleThemeSheets(pendingThemePrint.themeItems);
+    const taskPages = entries.reduce((sum, e) => sum + e.visibleTasks.length, 0);
+    const totalPages = taskPages + (includeCover ? 1 : 0);
+
+    const estEl = document.getElementById("print-estimate-text");
+    if (estEl) {
+      estEl.textContent = `${totalPages} sider (${Math.ceil(totalPages / 2)} A4-ark tosidig)`;
+    }
+  }
+
+
+function getBookThemeColors(bookName) {
+    const lower = (bookName || "").toLowerCase();
+    if (lower.includes("3b")) {
+      return { main: "#bc4778", soft: "#fdf2f7", border: "#f5c2d7", dark: "#7a2347" };
+    }
+    if (lower.includes("3a")) {
+      return { main: "#f69342", soft: "#fff7ed", border: "#fed7aa", dark: "#9a3412" };
+    }
+    if (lower.includes("2")) {
+      return { main: "#54b0d6", soft: "#f0f9ff", border: "#bae6fd", dark: "#0c4a6e" };
+    }
+    if (lower.includes("1")) {
+      return { main: "#a6c645", soft: "#f7fee7", border: "#d9f99d", dark: "#3f6212" };
+    }
+    // Standard Fabel-blå hvis boka ikke matcher 1, 2, 3a eller 3b
+    return { main: "#2b7de9", soft: "#f0f7ff", border: "#bfdbfe", dark: "#1e3a8a" };
+  }
+
+  function buildThemeCoverSheet(bookName, themeName, entries, includeToc, includePageNum) {
+    const cover = document.createElement("div");
+    cover.className = "a4-sheet batch-print-sheet theme-cover-sheet";
+    cover.style.position = "relative";
+
+    const colors = getBookThemeColors(bookName);
+    cover.style.setProperty("--book-main", colors.main);
+    cover.style.setProperty("--book-soft", colors.soft);
+    cover.style.setProperty("--book-border", colors.border);
+    cover.style.setProperty("--book-dark", colors.dark);
+
+    const logoSrc = document.querySelector(".sidebar-logo")?.getAttribute("src") || "";
+
+    let pageCursor = 2;
+    const tocRowsHtml = entries.map(entry => {
+      const startPage = pageCursor;
+      const endPage = pageCursor + entry.visibleTasks.length - 1;
+      pageCursor = endPage + 1;
+      const pageRange = includePageNum
+        ? (startPage === endPage ? `s. ${startPage}` : `s. ${startPage}–${endPage}`)
+        : `${entry.visibleTasks.length} ark`;
+
+      return `
+        <li class="cover-toc-item">
+          <div class="cover-toc-left">
+            <span class="cover-check-box"></span>
+            <span class="cover-toc-text"><strong>${entry.item.tittel}</strong> <span class="cover-book-pages">(${entry.item.sidetall})</span></span>
+          </div>
+          <span class="cover-toc-page">${pageRange}</span>
+        </li>
+      `;
+    }).join("");
+
+    cover.innerHTML = `
+      <div class="cover-frame">
+        <div class="cover-top-row">
+          <span class="cover-top-badge">${bookName}</span>
+          <span class="cover-top-sub">Klasselesekurs • Oppgavehefte</span>
+        </div>
+
+        <div class="cover-hero">
+          ${logoSrc ? `<img src="${logoSrc}" alt="Fabel" class="cover-hero-logo" />` : ""}
+          <h1 class="cover-title">${themeName}</h1>
+          <p class="cover-subtitle">Klasselesekurs og arbeidsoppgaver til temaet</p>
+        </div>
+
+        ${includeToc ? `
+          <div class="cover-toc-box">
+            <div class="cover-toc-header">
+              <h2 class="cover-toc-title">Innhold og framdrift</h2>
+              <span class="cover-toc-hint">Kryss av når du er ferdig</span>
+            </div>
+            <ul class="cover-toc-list">${tocRowsHtml}</ul>
+          </div>
+        ` : ""}
+
+        <div class="cover-student-box">
+          <div class="cover-field"><span>Navn:</span><span class="cover-line"></span></div>
+          <div class="cover-field"><span>Klasse:</span><span class="cover-line"></span></div>
+        </div>
+      </div>
+    `;
+
+    return cover;
+  }
+
+
+  function executeThemePrint(onAfterPrintCallback = null) {
+    if (!pendingThemePrint || !worksheetEl || !worksheetEl.parentNode) return;
+
+    const { themeItems, themeName, bookName } = pendingThemePrint;
+    const includeCover = document.getElementById("print-include-cover")?.checked ?? true;
+    const includeToc = includeCover && (document.getElementById("print-include-toc")?.checked ?? true);
+    const includePageNum = document.getElementById("print-include-pagenum")?.checked ?? true;
+
+    const entries = getVisibleThemeSheets(themeItems);
+    if (entries.length === 0) {
+      alert(`Ingen synlige oppgaveark å skrive ut for temaet «${themeName}».`);
+      return;
+    }
+
+    const prevItemIndex = currentItemIndex;
+    const prevTaskKey = currentTaskKey;
+    const wasWelcomeScreen = document.body.classList.contains("is-welcome-screen");
+    const parent = worksheetEl.parentNode;
+
+    parent.querySelectorAll(".batch-print-sheet").forEach(el => el.remove());
+
+    const allSheetsFragment = document.createDocumentFragment();
+    let pageNumber = 1;
+
+    if (includeCover) {
+      allSheetsFragment.appendChild(
+        buildThemeCoverSheet(bookName, themeName, entries, includeToc, includePageNum)
+      );
+      pageNumber = 2;
+    }
+
+    entries.forEach(entry => {
+      currentItemIndex = entry.textItem.index;
+      entry.visibleTasks.forEach(task => {
+        renderSingleSheetToEl(task.key);
+
+        const clone = worksheetEl.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.style.display = "";
+        clone.style.position = "relative";
+        clone.classList.add("batch-print-sheet");
+
+        if (includePageNum) {
+          const pNumEl = document.createElement("div");
+          pNumEl.className = "sheet-page-number";
+          pNumEl.textContent = `Side ${pageNumber}`;
+          clone.appendChild(pNumEl);
+        }
+
+        allSheetsFragment.appendChild(clone);
+        pageNumber++;
+      });
+    });
+
+    currentItemIndex = prevItemIndex;
+    currentTaskKey = prevTaskKey;
+
+    document.body.classList.remove("is-welcome-screen");
+    document.body.classList.add("printing-all-sheets");
+    parent.appendChild(allSheetsFragment);
+
+    let cleaned = false;
+    const cleanup = () => {
+      if (cleaned) return;
+      cleaned = true;
+      document.body.classList.remove("printing-all-sheets");
+      if (wasWelcomeScreen) document.body.classList.add("is-welcome-screen");
+      parent.querySelectorAll(".batch-print-sheet").forEach(el => el.remove());
+      window.removeEventListener("afterprint", cleanup);
+      if (typeof onAfterPrintCallback === "function") onAfterPrintCallback();
+    };
+
+    window.addEventListener("afterprint", cleanup);
+    setTimeout(() => {
+      window.print();
+      setTimeout(cleanup, 1200);
+    }, 60);
+  }
+
+  // Koble hendelser til utskriftsmodalene
+  ["print-include-cover", "print-include-toc", "print-include-pagenum"].forEach(id => {
+    document.getElementById(id)?.addEventListener("change", updateThemePrintEstimate);
+  });
+
+  document.querySelectorAll("[data-close-pmodal]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-close-pmodal");
+      document.getElementById(targetId)?.classList.add("hidden");
+    });
+  });
+
+  document.getElementById("btn-do-normal-print")?.addEventListener("click", () => {
+    document.getElementById("print-options-modal")?.classList.add("hidden");
+    executeThemePrint();
+  });
+
+  document.getElementById("btn-open-pdf-guide")?.addEventListener("click", () => {
+    document.getElementById("print-options-modal")?.classList.add("hidden");
+    document.getElementById("pdf-guide-modal")?.classList.remove("hidden");
+  });
+
+  document.getElementById("btn-continue-save-pdf")?.addEventListener("click", () => {
+    document.getElementById("pdf-guide-modal")?.classList.add("hidden");
+    executeThemePrint(() => {
+      document.getElementById("pdf-ready-modal")?.classList.remove("hidden");
+    });
+  });
+
+  // Fanebytte i veiledningsmodalene
+  document.querySelectorAll(".pmodal-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      const group = tab.closest(".pmodal-tabs");
+      const container = tab.closest(".pmodal-body");
+      group?.querySelectorAll(".pmodal-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const targetPaneId = tab.getAttribute("data-tab-target");
+      container?.querySelectorAll(".pmodal-tab-pane").forEach(pane => {
+        pane.classList.toggle("active", pane.id === targetPaneId);
+      });
+    });
+  });
+
+  // Åpne lagret PDF i nettleser (Modal 3)
+  document.getElementById("btn-open-saved-pdf")?.addEventListener("click", () => {
+    document.getElementById("pdf-file-picker")?.click();
+  });
+
+  document.getElementById("pdf-file-picker")?.addEventListener("change", (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const blobUrl = URL.createObjectURL(file);
+    const link = document.getElementById("opened-pdf-link");
+    const wrap = document.getElementById("opened-pdf-link-wrap");
+    if (link && wrap) {
+      link.href = blobUrl;
+      wrap.classList.remove("hidden");
+    }
+    window.open(blobUrl, "_blank", "noopener");
+  });
+
+  // Bildelupe i veiledningen
+  document.querySelectorAll("[data-zoom-img]").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const src = el.getAttribute("data-zoom-img");
+      const title = el.getAttribute("data-zoom-title") || "";
+      const imgEl = document.getElementById("pmodal-zoom-image");
+      const capEl = document.getElementById("pmodal-zoom-caption");
+      if (imgEl) imgEl.src = src;
+      if (capEl) capEl.textContent = title;
+      document.getElementById("pmodal-zoom-overlay")?.classList.remove("hidden");
+    });
+  });
+
+  document.getElementById("pmodal-zoom-close")?.addEventListener("click", () => {
+    document.getElementById("pmodal-zoom-overlay")?.classList.add("hidden");
+  });
+
 
 // 3. ENKEL REDIGERING AV ORD OG TEKST
   function renderEditPanel() {
@@ -1432,6 +1814,19 @@ function applyLuketekstSize(sizeKey) {
     selSilhuettType.addEventListener("change", (e) => {
       localStorage.setItem("fabel_silhuett_type", e.target.value);
       renderWorksheet();
+    });
+  }
+
+const ordkjedeSizeSelect = document.getElementById("ordkjede-font-size");
+  if (ordkjedeSizeSelect) {
+    ordkjedeSizeSelect.value = ordkjedeFontSize;
+    ordkjedeSizeSelect.addEventListener("change", (e) => {
+      ordkjedeFontSize = e.target.value;
+      localStorage.setItem("fabel_ordkjede_size", ordkjedeFontSize);
+      document.querySelectorAll(".a4-sheet").forEach(sheet => {
+        sheet.classList.remove("ordkjede-size-small", "ordkjede-size-medium", "ordkjede-size-large");
+        sheet.classList.add(`ordkjede-size-${ordkjedeFontSize}`);
+      });
     });
   }
 

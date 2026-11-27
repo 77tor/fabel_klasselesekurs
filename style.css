@@ -221,6 +221,15 @@ body.is-welcome-screen .zoom-controls { display: none; }
   #worksheet-stack, .a4-sheet { zoom: 1 !important; transform: none !important; }
 }
 
+/* Tema-undermapper i venstremenyen */
+.menu-theme-group { padding: 4px 6px 2px 10px; }
+.menu-theme-row { display: flex; align-items: center; gap: 4px; background: rgba(255, 255, 255, 0.04); border-radius: 6px; transition: background 0.15s; }
+.menu-theme-row:hover { background: #273549; }
+.menu-theme-header { flex: 1; min-width: 0; background: none; border: none; color: #e2e8f0; font-family: var(--font-main); font-size: 0.88rem; font-weight: 700; padding: 8px 6px 8px 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 6px; text-align: left; }
+.menu-theme-row:hover .menu-theme-header { color: #ffffff; }
+.menu-theme-header .theme-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-theme-row:hover .menu-print-all-btn { opacity: 1; }
+.menu-theme-texts { padding-left: 8px; margin-top: 3px; border-left: 2px solid #334155; }
 
 /* ==========================================================================
    3. HOVEDOMRÅDE, VERKTØYLINJE & REDIGERINGSPANEL
@@ -378,31 +387,45 @@ body.luketekst-size-xlarge .cloze-blank { width: 200px; }
 
 /* 5.4 Silhuett-ord og ordkjeder */
 .theme-silhuett .sheet-colored-box { display: flex; flex-direction: column; flex: 1; gap: 14px; padding-bottom: 18px; }
-.silhuett-main-box { background: #fff; border-radius: 12px; padding: 18px 20px 28px; }
+.silhuett-main-box { background: #fff; border-radius: 12px; padding: 18px 8px 28px; }
 .silhuett-bank { width: 100%; margin: 0 auto 16px; background: #fff; border: 1.5px solid #000; border-radius: 12px; overflow: hidden; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
 .silhuett-bank td { border: none; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; padding: 8px 14px; font-size: 1.45rem; font-weight: 600; width: 33.33%; }
 .silhuett-bank td:last-child { border-right: none; }
 .silhuett-bank tr:last-child td { border-bottom: none; }
-.silhuett-canvas { background: #fff; padding: 26px 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px 20px; align-items: center; justify-items: center; }
+.silhuett-canvas { background: #fff; padding: 26px 4px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px 12px; align-items: center; justify-items: center; }
 .silhuett-word { display: flex; align-items: flex-start; }
-.s-box { width: 28px; height: 28px; border: 2px solid #000; margin-left: -2px; background: #fff; }
-.s-box.asc { height: 44px; margin-top: -16px; }
-.s-box.desc { height: 44px; }
+
+.s-box { width: 33px; height: 33px; border: 2px solid #000; margin-left: -2px; background: #fff; }
+.s-box.asc { height: 52px; margin-top: -19px; }
+.s-box.desc { height: 52px; }
+
+/* Automatisk tilpasning kun for lange ord (9+ bokstaver) som utnytter hele kolonnebredden */
+.silhuett-word.word-long .s-box { width: 30px; height: 32px; }
+.silhuett-word.word-long .s-box.asc { height: 50px; margin-top: -18px; }
+.silhuett-word.word-long .s-box.desc { height: 50px; }
+
+.silhuett-word.word-xlong .s-box { width: 27px; height: 31px; }
+.silhuett-word.word-xlong .s-box.asc { height: 48px; margin-top: -17px; }
+.silhuett-word.word-xlong .s-box.desc { height: 48px; }
+
 .ordkjeder-box { background: #fff; border-radius: 12px; padding: 16px 20px 24px; margin-top: auto; margin-bottom: 0; }
 .ordkjeder-title { font-family: var(--font-display); font-size: 2.2rem; text-align: center; color: #000; margin: 0 0 18px; letter-spacing: 1px; }
-.ordkjeder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 20px; text-align: center; font-size: 1.4rem; font-weight: 600; }
+.ordkjeder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 20px; text-align: center; font-size: 1.55rem; font-weight: 600; }
+.a4-sheet.ordkjede-size-small .ordkjeder-grid { font-size: 1.35rem; }
+.a4-sheet.ordkjede-size-medium .ordkjeder-grid { font-size: 1.55rem; }
+.a4-sheet.ordkjede-size-large .ordkjeder-grid { font-size: 1.8rem; }
 body.hide-silhuett-ordkjeder .ordkjeder-box { display: none; }
 body.hide-silhuett-ordkjeder .silhuett-main-box { flex: 1; display: flex; flex-direction: column; }
-body.hide-silhuett-ordkjeder .silhuett-canvas { flex: 1; align-content: space-evenly; gap: 64px 20px; }
+body.hide-silhuett-ordkjeder .silhuett-canvas { flex: 1; align-content: space-evenly; gap: 64px 12px; }
 .silhuett-item { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.bokstavhus-linjer { display: none; width: 82%; max-width: 280px; margin-top: 22px; }
+.bokstavhus-linjer { display: none; width: 92%; max-width: 325px; margin-top: 20px; }
 body.show-silhuett-linjer .bokstavhus-linjer { display: block; }
 .bh-line { width: 100%; }
-.bh-top, .bh-mid { border-top: 1.5px solid #9ca3af; height: 12px; }
-.bh-base { border-top: 3px solid #1e293b; height: 12px; }
+.bh-top, .bh-mid { border-top: 1.5px solid #9ca3af; height: 16px; }
+.bh-base { border-top: 3px solid #1e293b; height: 15px; }
 .bh-bottom { border-top: 1.5px solid #9ca3af; height: 2px; }
-body.show-silhuett-linjer .silhuett-canvas { gap: 38px 20px; }
-body.show-silhuett-linjer.hide-silhuett-ordkjeder .silhuett-canvas { gap: 52px 20px; }
+body.show-silhuett-linjer .silhuett-canvas { gap: 32px 12px; }
+body.show-silhuett-linjer.hide-silhuett-ordkjeder .silhuett-canvas { gap: 46px 12px; }
 .toolbar-select { border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: 700; color: #1e293b; background: #fff; cursor: pointer; }
 
 /* 5.5 Lydrette ord */
@@ -486,3 +509,112 @@ body.show-gitter-fasit .gitter-fasit-letter { display: inline; }
 .popover-switch-row input[type="checkbox"]::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #ffffff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease; }
 .popover-switch-row input[type="checkbox"]:checked { background: #2563eb; }
 .popover-switch-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
+
+/* ==========================================================================
+   UTSKRIFTSMODALER & TEMAHEFTE (FORSIDE, INNHOLD, SIDETALL)
+   ========================================================================== */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 9500; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-backdrop.hidden, .hidden { display: none !important; }
+.pmodal-box { background: #fff; color: #1e293b; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.3); width: 100%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; font-family: var(--font-main); }
+.pmodal-medium { max-width: 520px; }
+.pmodal-large { max-width: 780px; }
+
+.pmodal-header { padding: 16px 22px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.pmodal-header-indigo { background: #4338ca; }
+.pmodal-header-green { background: #15803d; }
+.pmodal-header-blue { background: #1d4ed8; }
+.pmodal-header-title { display: flex; align-items: center; gap: 12px; }
+.pmodal-header-title h2 { font-size: 1.15rem; font-weight: 800; margin: 0; }
+.pmodal-subtitle { font-size: 0.85rem; opacity: 0.9; margin: 2px 0 0; }
+.pmodal-close { background: none; border: none; color: #fff; font-size: 1.25rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.pmodal-close:hover { background: rgba(255,255,255,0.18); }
+
+.pmodal-body { padding: 20px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.pmodal-section-label { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.05em; color: #64748b; }
+.pmodal-checkbox-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; user-select: none; }
+.pmodal-checkbox-row:hover { background: #f8fafc; }
+.pmodal-checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4338ca; cursor: pointer; }
+.pmodal-divider { border: none; border-top: 1px solid #e2e8f0; margin: 4px 0; }
+.pmodal-estimate-box { background: #f1f5f9; padding: 12px 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; }
+.pmodal-estimate-box strong { color: #1e293b; font-size: 1rem; }
+
+.pmodal-footer { padding: 14px 22px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.pmodal-footer.space-between { justify-content: space-between; }
+.pmodal-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 15px; border-radius: 8px; border: none; font-family: var(--font-main); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: filter 0.15s; }
+.pmodal-btn:hover { filter: brightness(0.93); }
+.pmodal-btn-ghost, .pmodal-btn-plain { background: #e2e8f0; color: #334155; }
+.pmodal-btn-indigo { background: #4338ca; color: #fff; }
+.pmodal-btn-green { background: #16a34a; color: #fff; }
+.pmodal-btn-blue { background: #2563eb; color: #fff; }
+.pmodal-btn-dark { background: #1e293b; color: #fff; }
+
+/* Faner og veiledning i Modal 2 & 3 */
+.pmodal-step-title { font-size: 1rem; font-weight: 800; color: #0f172a; margin: 4px 0; }
+.pmodal-step2-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pmodal-ol { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem; line-height: 1.45; }
+.pmodal-tabs { display: flex; gap: 6px; background: #e2e8f0; padding: 3px; border-radius: 8px; }
+.pmodal-tab { border: none; background: transparent; padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #475569; }
+.pmodal-tab.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+.pmodal-tab-pane { display: none; flex-direction: column; gap: 10px; }
+.pmodal-tab-pane.active { display: flex; }
+.pmodal-thumbs-grid { display: grid; gap: 10px; }
+.pmodal-thumbs-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.pmodal-thumbs-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.pmodal-thumb-card { border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px; cursor: zoom-in; background: #f8fafc; text-align: center; font-size: 0.8rem; font-weight: 700; }
+.pmodal-thumb-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 4px; margin-top: 5px; }
+.pmodal-zoom-hint { font-size: 0.8rem; color: #64748b; text-align: center; }
+.pmodal-open-pdf-banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+/* Forside på temahefte (A4) – fargekodet per bok */
+.theme-cover-sheet { display: flex !important; flex-direction: column; padding: 10mm !important; box-sizing: border-box; background: var(--book-main, #2b7de9) !important; }
+.cover-frame { flex: 1; background: #ffffff; border-radius: 18px; padding: 14mm 16mm; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
+.cover-top-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+.cover-top-badge { background: var(--book-main, #2b7de9); color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 5px 14px; border-radius: 999px; letter-spacing: 0.03em; }
+.cover-top-sub { font-size: 0.9rem; font-weight: 700; color: #64748b; }
+
+.cover-hero { text-align: center; background: var(--book-soft, #f0f7ff); border: 2px solid var(--book-border, #bfdbfe); border-radius: 16px; padding: 10mm 8mm; margin: 6mm 0; }
+.cover-hero-logo { width: 82px; height: 82px; object-fit: contain; margin: 0 auto 10px; }
+.cover-title { font-size: 2.5rem; font-weight: 800; color: var(--book-dark, #1e3a8a); line-height: 1.15; margin: 0; }
+.cover-subtitle { font-size: 1.05rem; color: var(--book-dark, #1e3a8a); opacity: 0.85; margin-top: 6px; font-weight: 700; }
+
+.cover-toc-box { border: 2px solid #cbd5e1; border-radius: 14px; padding: 12px 16px; background: #ffffff; margin: auto 0; }
+.cover-toc-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 10px; }
+.cover-toc-title { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #1e293b; margin: 0; }
+.cover-toc-hint { font-size: 0.8rem; font-weight: 600; color: #64748b; }
+.cover-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.cover-toc-item { display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem; padding: 6px 10px; border-radius: 8px; background: #f8fafc; }
+.cover-toc-left { display: flex; align-items: center; gap: 10px; color: #0f172a; }
+.cover-check-box { width: 15px; height: 15px; border: 2px solid #64748b; border-radius: 4px; display: inline-block; background: #fff; flex-shrink: 0; }
+.cover-toc-text strong { font-weight: 800; font-size: 1.08rem; color: #0f172a; }
+.cover-book-pages { font-weight: 400; font-size: 0.95rem; color: #475569; }
+.cover-toc-page { font-weight: 800; color: var(--book-dark, #1e40af); background: var(--book-soft, #dbeafe); border: 1px solid var(--book-border, #bfdbfe); padding: 2px 9px; border-radius: 999px; font-size: 0.85rem; }
+
+.cover-student-box { margin-top: 8mm; display: grid; grid-template-columns: 2fr 1fr; gap: 18px; background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 12px; padding: 12px 16px; }
+.cover-field { font-size: 1.05rem; font-weight: 800; color: #1e293b; display: flex; align-items: flex-end; gap: 8px; }
+.cover-line { flex: 1; border-bottom: 2px solid #475569; height: 18px; }
+
+/* Sidetall i bunnrammen ved utskrift av temahefte */
+.a4-sheet .sheet-page-number {
+  position: absolute !important;
+  left: auto !important;
+  right: 12mm !important;
+  bottom: 2.2mm !important;
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  z-index: 20 !important;
+  pointer-events: none;
+}
+
+@media print {
+  .a4-sheet .sheet-page-number {
+    position: absolute !important;
+    left: auto !important;
+    right: 12mm !important;
+    bottom: 2.2mm !important;
+    color: #ffffff !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    z-index: 20 !important;
+  }
+}
