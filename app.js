@@ -1260,10 +1260,21 @@ const pad = STROKE;
 // ==========================================================================
   // TEMAHEFTE: MODAL, FORSIDE, INNHOLDSFORTEGNELSE & PDF-FLYT
   // ==========================================================================
-  let pendingThemePrint = null;
+let pendingThemePrint = null;
 
   function openThemePrintModal(themeItems, themeName, bookName) {
     pendingThemePrint = { themeItems, themeName, bookName };
+
+    // Forhåndslast forsidebildet i bakgrunnen mens modalen er åpen
+    const cleanName = (themeName || "").trim().replace(/^\d+\.\s*/, "");
+    const slug = cleanName
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    if (slug) new Image().src = `bilder/${slug}.png`;
 
     const subtitleEl = document.getElementById("print-modal-theme-subtitle");
     if (subtitleEl) subtitleEl.textContent = `${bookName} – ${themeName}`;
@@ -1432,8 +1443,36 @@ function getThemeCoverVisualHTML(themeName, logoSrc) {
   }
 
 
+async function waitForImagesToLoad(containerElement) {
+    const images = Array.from(containerElement.querySelectorAll("img"));
 
-  function executeThemePrint(onAfterPrintCallback = null) {
+    await Promise.all(
+      images.map((img) => {
+        if (img.style.display === "none") return Promise.resolve();
+
+        if (img.complete) {
+          return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+        }
+
+        return new Promise((resolve) => {
+          const done = () => {
+            if (img.decode) {
+              img.decode().catch(() => {}).finally(resolve);
+            } else {
+              resolve();
+            }
+          };
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      })
+    );
+
+    // Gi nettleseren to korte bildeoppdateringer til å tegne bildet ferdig
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  }
+
+  async function executeThemePrint(onAfterPrintCallback = null) {
     if (!pendingThemePrint || !worksheetEl || !worksheetEl.parentNode) return;
 
     const { themeItems, themeName, bookName } = pendingThemePrint;
@@ -1505,11 +1544,12 @@ function getThemeCoverVisualHTML(themeName, logoSrc) {
       if (typeof onAfterPrintCallback === "function") onAfterPrintCallback();
     };
 
+    // Vent til forsidebildet (og eventuelle andre bilder) er ferdig lastet og tegnet
+    await waitForImagesToLoad(parent);
+
     window.addEventListener("afterprint", cleanup);
-    setTimeout(() => {
-      window.print();
-      setTimeout(cleanup, 1200);
-    }, 60);
+    window.print();
+    setTimeout(cleanup, 1200);
   }
 
   // Koble hendelser til utskriftsmodalene
